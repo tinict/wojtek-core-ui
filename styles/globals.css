@@ -4,6 +4,18 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
-	--font-sans: "font", sans-serif;
-	--font-mono: "monospace", monospace;
+  /* fonts */
+  --font-sans: "font", sans-serif;
+  --font-mono: "monospace", monospace;
+  
+  --color-primary: #0E82FD;
+  --color-white: #FFFFFF;
+
+  --color-grey-600: #465D7C;
+  --color-grey-900: #012047;
+
+  --color-grey-transparent: #E6E8EE;
+  --color-dark: #000F28;
+  --color-shades: #519EFF;
+  --color-light-300: #F6FAFF;
 }

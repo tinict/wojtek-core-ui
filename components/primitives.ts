@@ -51,3 +51,20 @@ export const subtitle = tv({
     fullWidth: true,
   },
 });
+
+
+export const anyClinicalBase = tv({
+  variants: {
+    color: {
+      primary: "#0E82FD",
+      white: "#FFFFFF",
+      grey300: "#0E82FD",
+      grey900: "#012047",
+      grey600: "#465D7C",
+      greyTransparent: "#E6E8EE",
+      dark: "#000F28",
+      shades: "#519EFF",
+      light300: "#F6FAFF",
+    },
+  }
+})
