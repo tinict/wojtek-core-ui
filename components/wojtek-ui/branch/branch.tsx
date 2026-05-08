@@ -105,8 +105,9 @@ const BranchGroup = ({ children, className, ...props }: BranchGroupProps) => {
 interface BranchLogoProps extends ComponentPropsWithRef<typeof Avatar.Image> {
     children?: React.ReactNode;
     className?: string;
-    customLogo?: ComponentPropsWithRef<typeof Avatar>;
+    customlogo?: ComponentPropsWithRef<typeof Avatar>;
 };
+
 
 const BranchLogo = ({
   children,
@@ -130,7 +131,7 @@ const BranchLogo = ({
 
   return (
     <Avatar
-        {...props.customLogo}
+        {...props.customlogo}
     >
         <Avatar.Image
           className={className}

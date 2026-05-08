@@ -1,16 +1,16 @@
 "use client";
 
-import { SwiperWojtek } from "@/components/wojtek-ui/swiper";
-import { Card } from "@heroui/react";
+import { Breadcrumbs, Card, Chip, Label, SearchField } from "@heroui/react";
 import { CircleCheck, Clock7 } from "lucide-react";
 import Chart, { CategoryScale } from 'chart.js/auto';
 import PieChart from "@/components/wojtek-ui/pie-chart/pieChart";
 import { useState } from "react";
 import NextLink from "next/link";
+import { SingleWithCustomIndicator } from "@/components/wojtek-ui/singleWithCustomIndicator";
 
 Chart.register(CategoryScale);
 
-export default function Home() {
+export default function PhanAnhHienTruong() {
   const Data = [
     { id: 1, year: 2016, userGain: 80000, userLost: 823 },
     { id: 2, year: 2017, userGain: 45677, userLost: 345 },
@@ -40,18 +40,51 @@ export default function Home() {
 
   return (
     <section className="flex flex-col">
-      <SwiperWojtek
-        images={[
-          {
-            src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-            alt: "Image 1",
-          },
-          {
-            src: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=60",
-            alt: "Image 2",
-          },
-        ]}
-      />
+      <Breadcrumbs>
+        <Breadcrumbs.Item href="/">
+          Trang chủ
+        </Breadcrumbs.Item>
+        <Breadcrumbs.Item href="/phan-anh-hien-truong">
+          Phản ánh hiện trường
+        </Breadcrumbs.Item>
+      </Breadcrumbs>
+
+      <div className="flex items-center justify-center my-4 mt-16">
+        <h1 className="text-3xl font-bold font-sans tracking-tight">
+          <span className="text-blue-950">Danh sách </span>
+          <span className="text-primary">phản ánh</span>
+        </h1>
+      </div>
+      
+      <div className="flex items-center justify-center gap-4">
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          <Chip size="lg" className="uppercase font-bold hover:bg-accent hover:text-white cursor-default">
+            Tất cả
+          </Chip>
+          <Chip size="lg" className="uppercase font-bold hover:bg-accent hover:text-white cursor-default">
+            Đã xử lý
+          </Chip>
+          <Chip size="lg" className="uppercase font-bold hover:bg-accent hover:text-white cursor-default">
+            Đang xử lý
+          </Chip>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-center w-full mx-auto mb-6 my-6">
+        <SearchField name="search">
+          <SearchField.Group className="bg-[#f6f5f5] rounded-3xl border border-[#E6E8EE] px-4 py-2 w-[300px] h-[40px] focus-within:border-[#0E82FD] focus-within:ring-2 focus-within:ring-[#0E82FD]/15 transition-all">
+            <SearchField.SearchIcon />
+            <SearchField.Input 
+              className="w-full" 
+              placeholder="Tra cứu phản ánh" 
+            />
+            <SearchField.ClearButton />
+          </SearchField.Group>
+        </SearchField>
+        <div className="ml-2">
+          <SingleWithCustomIndicator />
+        </div>
+      </div>
 
       <div className="flex items-center border-l-4 border-l-primary p-3 mt-4">
         <h1 className="text-base font-bold uppercase">Phản ánh hiện trường</h1>
@@ -60,7 +93,7 @@ export default function Home() {
       <div className="grid grid-cols-1 lg:grid-cols-6 gap-4 mt-4">
         <section className="lg:col-span-4">
           <NextLink
-            href="/phan-anh-hien-truong"
+            href="/phan-anh-hien-truong/1"
             className="text-sm text-[#0E82FD] font-medium"
           >
             <Card className="w-full flex flex-col sm:flex-row items-stretch">

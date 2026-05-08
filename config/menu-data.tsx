@@ -7,6 +7,7 @@ import {
     Shield,
 } from "lucide-react";
 import type { NavMenuData } from "@/types/type";
+import { MegaMenuPanelQuickLink } from "@/components/wojtek-ui/mega-menu-panel/mega-menu-panel.types";
 
 export const defaultMenuData: NavMenuData = {
     "Về chúng tôi": {
@@ -96,10 +97,10 @@ export const defaultMenuData: NavMenuData = {
     "Liên hệ": null,
 };
 
-export const defaultQuickLinks = [
-    "Đặt lịch khám",
-    "Tra cứu kết quả",
-    "Hướng dẫn thăm khám",
-    "Bảng giá dịch vụ",
-    "Hỏi đáp sức khỏe",
+export const defaultQuickLinks: MegaMenuPanelQuickLink[] = [
+  { label: "Đặt lịch khám", href: "#" },
+  { label: "Tra cứu kết quả", href: "#" },
+  { label: "Hướng dẫn thăm khám", href: "#" },
+  { label: "Bảng giá dịch vụ", href: "#" },
+  { label: "Hỏi đáp sức khỏe", href: "#" },
 ];

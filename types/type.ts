@@ -1,8 +1,10 @@
+import { MegaMenuPanelQuickLink } from "@/components/wojtek-ui/mega-menu-panel/mega-menu-panel.types";
 import type { ReactNode } from "react";
 
 export interface NavMenuItem {
     label: string;
     icon: ReactNode;
+    href?: string;
     badge?: string;
 };
 
@@ -38,7 +40,7 @@ export interface MobileDrawerProps {
 
 export interface NavbarProps {
     menuData?: NavMenuData;
-    quickLinks?: string[];
+    quickLinks?: MegaMenuPanelQuickLink[];
     ctaLabel?: string;
     secondaryLabel?: string;
     hotline?: string;

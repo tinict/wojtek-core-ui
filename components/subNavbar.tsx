@@ -48,15 +48,15 @@ export const SubNavbar = () => {
             <header className="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-6 px-6">
                 <NextLink href="/">
                     <Branch className="flex items-center gap-2 shrink-0">
-                        <Branch.Group className="flex items-center gap-4">
-                            {/* <Branch.Logo
-                                customLogo={{
-                                    size: "md",
+                        <Branch.Group className="flex items-center gap-2">
+                            <Branch.Logo
+                                customlogo={{
+                                    size: "lg",
                                     className: "bg-[#FFFFFF]",
                                 }}
-                                src={""}
-                            /> */}
-                            <Branch.Label className="font-bold text-lg text-primary tracking-tight uppercase">
+                                src={"logo_bv1.webp"}
+                            />
+                            <Branch.Label className="font-bold lg:text-lg md:text-base text-sm text-primary tracking-tight uppercase">
                                 {siteConfig.name}
                             </Branch.Label>
                         </Branch.Group>
@@ -69,54 +69,14 @@ export const SubNavbar = () => {
 
                 <div className="hidden sm:flex items-center gap-3 shrink-0">
                     <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-sm font-medium text-gray-700 rounded-full"
-                        onPress={() => console.log("Hướng dẫn")}
-                    >
-                        Hướng dẫn thăm khám
-                    </Button>
-                    <Button
                         variant="primary"
                         size="sm"
-                        className="text-sm font-semibold rounded-full px-5 bg-[#0d9bac] hover:bg-[#0b8a99]"
+                        className="text-sm font-semibold rounded-full px-5 bg-primary hover:bg-[#0b8a99]"
                         onPress={() => console.log("Đặt lịch")}
                     >
-                        Đặt lịch ngay
+                        Đăng nhập
                     </Button>
                 </div>
-
-                <Button
-                    variant="ghost"
-                    size="sm"
-                    isIconOnly
-                    aria-label="Toggle menu"
-                    className="flex sm:hidden rounded-full"
-                    onPress={() => setIsMenuOpen(!isMenuOpen)}
-                >
-                    <svg
-                        className="h-5 w-5 text-gray-600"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        {isMenuOpen ? (
-                            <path
-                                d="M6 18L18 6M6 6l12 12"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                            />
-                        ) : (
-                            <path
-                                d="M4 6h16M4 12h16M4 18h16"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth={2}
-                            />
-                        )}
-                    </svg>
-                </Button>
             </header>
 
             <div

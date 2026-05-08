@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "BỆNH VIỆN TRUNG ƯƠNG HUẾ",
+  name: "CỔNG PHẢN ÁNH KIẾN NGHỊ",
   description: "Make beautiful websites regardless of your design experience.",
   navItems: [
     { label: "Về chúng tôi", href: "/ve-chung-toi" },

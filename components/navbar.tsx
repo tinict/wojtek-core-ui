@@ -10,8 +10,8 @@ import { ChevronDown, Menu } from "lucide-react";
 
 import { NavbarProps } from "@/types/type";
 import { defaultMenuData, defaultQuickLinks } from "@/config/menu-data";
-import { MegaMenuPanel } from "./megaMenuPanel";
-import { MobileDrawer } from "./mobiledrawer";
+import {MegaMenuPanelFeatured, MegaMenuPanelHotline, MegaMenuPanelQuickLinks, MegaMenuPanelRoot, MegaMenuPanelSection } from "./wojtek-ui/mega-menu-panel";
+import { MobileDrawer } from "./wojtek-ui/drawer";
 
 export function Navbar({
   menuData = defaultMenuData,
@@ -21,10 +21,10 @@ export function Navbar({
   hotline = "1800 599 920",
 }: NavbarProps) {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);
-  const [scrolled, setScrolled]         = useState<boolean>(false);
-  const [activeMega, setActiveMega]     = useState<string | null>(null);
-  const navRef                          = useRef<HTMLElement>(null);
-  const megaTimeout                     = useRef<NodeJS.Timeout | undefined>(undefined);
+  const [scrolled, setScrolled] = useState<boolean>(false);
+  const [activeMega, setActiveMega] = useState<string | null>(null);
+  const navRef = useRef<HTMLElement>(null);
+  const megaTimeout = useRef<NodeJS.Timeout | undefined>(undefined);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -75,8 +75,6 @@ export function Navbar({
           scrolled ? "shadow-[0_4px_24px_-4px_rgba(1,32,71,0.10)]" : "shadow-none"
         )}
       >
-        <div className="h-0.5 w-full bg-gradient-to-r from-[#0E82FD] via-[#519EFF] to-[#0E82FD]" />
-
         <header className="mx-auto flex h-16 max-w-[1280px] items-center justify-between gap-4 px-6">
           {/* <NextLink className="group flex items-center gap-2.5 shrink-0" href="/">
             <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-[#0E82FD] to-[#012047] text-white shadow-md shadow-[#0E82FD]/30 group-hover:shadow-[#0E82FD]/50 transition-all">
@@ -158,22 +156,50 @@ export function Navbar({
           </Button>
         </header>
 
-        {activeMega !== null && menuData[activeMega] != null && (
-          <div onMouseEnter={handlePanelEnter} onMouseLeave={handlePanelLeave}>
-            <MegaMenuPanel
-              data={menuData[activeMega]!}
+        {activeMega !== null && menuData[activeMega] != null && (() => {
+          const entry = menuData[activeMega]!;
+          return (
+            <MegaMenuPanelRoot
               onClose={() => setActiveMega(null)}
-            />
-          </div>
-        )}
+              onMouseEnter={handlePanelEnter}
+              onMouseLeave={handlePanelLeave}
+            >
+              <MegaMenuPanelFeatured
+                badge={entry.featured.badge}
+                title={entry.featured.title}
+                desc={entry.featured.desc}
+              />
+
+              {entry.sections.map((section) => (
+                <MegaMenuPanelSection
+                  key={section.title}
+                  title={section.title}
+                  items={section.items}
+                />
+              ))}
+
+              <MegaMenuPanelQuickLinks links={defaultQuickLinks}>
+                <MegaMenuPanelHotline phone={hotline} />
+              </MegaMenuPanelQuickLinks>
+            </MegaMenuPanelRoot>
+          );
+        })()}
       </nav>
 
       <MobileDrawer
         isOpen={isDrawerOpen}
         onClose={() => setIsDrawerOpen(false)}
-        menuData={menuData}
-        quickLinks={quickLinks}
-      />
+      >
+        <MobileDrawer.Header />
+        <MobileDrawer.Search />
+        <MobileDrawer.Nav menuData={menuData} />
+        <MobileDrawer.QuickLinks links={quickLinks} />
+        <MobileDrawer.Footer
+          hotline={hotline}
+          ctaLabel={ctaLabel}
+          secondaryLabel={secondaryLabel}
+        />
+      </MobileDrawer>
     </>
   );
 }
