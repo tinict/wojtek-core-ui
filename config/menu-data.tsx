@@ -1,106 +1,24 @@
-import {
-    Heart,
-    Brain,
-    Bone,
-    Stethoscope,
-    Activity,
-    Shield,
-} from "lucide-react";
-import type { NavMenuData } from "@/types/type";
+import type { NavMenuData, NavHrefs } from "@/types/type";
 import { MegaMenuPanelQuickLink } from "@/components/wojtek-ui/mega-menu-panel/mega-menu-panel.types";
 
 export const defaultMenuData: NavMenuData = {
-    "Về chúng tôi": {
-        featured: {
-            title: "Phòng khám An Y",
-            desc: "Cơ sở y tế hiện đại, đội ngũ bác sĩ chuyên nghiệp tận tâm",
-            badge: "Tin cậy",
-        },
-        sections: [
-            {
-                title: "Giới thiệu",
-                items: [
-                    {
-                        label: "Cơ sở vật chất",
-                        icon: <Shield className="w-4 h-4" />,
-                    },
-                    {
-                        label: "Trách nhiệm xã hội",
-                        icon: <Heart className="w-4 h-4" />,
-                    },
-                ],
-            },
-        ],
-    },
+    "Trang chủ": null,
+    "Phản ánh kiến nghị": null,
+    "Tra cứu kết quả trả lời": null,
+    "Quy trình tiếp nhận xử lý": null,
+};
 
-    "Cơ xương khớp": {
-        featured: {
-            title: "Chuyên khoa Cơ xương khớp",
-            desc: "Điều trị các bệnh lý về xương khớp, cột sống với phác đồ tiên tiến",
-            badge: "Chuyên sâu",
-        },
-        sections: [
-            {
-                title: "Dịch vụ",
-                items: [
-                    {
-                        label: "Thoái hoá khớp",
-                        icon: <Bone className="w-4 h-4" />,
-                    },
-                    {
-                        label: "Loãng xương",
-                        icon: <Bone className="w-4 h-4" />,
-                        badge: "Mới",
-                    },
-
-                    {
-                        label: "Viêm khớp dạng thấp",
-                        icon: <Activity className="w-4 h-4" />,
-                    },
-                    {
-                        label: "Đau cột sống",
-                        icon: <Stethoscope className="w-4 h-4" />,
-                    },
-                ],
-            },
-        ],
-    },
-
-    "Tin tức": {
-        featured: {
-            title: "Tin tức sức khoẻ",
-            desc: "Cập nhật thông tin y tế, kiến thức chăm sóc sức khoẻ mới nhất",
-            badge: "Mới nhất",
-        },
-        sections: [
-            {
-                title: "Chuyên mục",
-                items: [
-                    {
-                        label: "Kiến thức sức khoẻ",
-                        icon: <Brain className="w-4 h-4" />,
-                    },
-                    {
-                        label: "Hoạt động phòng khám",
-                        icon: <Heart className="w-4 h-4" />,
-                    },
-                    {
-                        label: "Y học hiện đại",
-                        icon: <Stethoscope className="w-4 h-4" />,
-                        badge: "Mới",
-                    },
-                ],
-            },
-        ],
-    },
-
-    "Liên hệ": null,
+// Map label → href cho các item không có mega menu
+export const navHrefs: NavHrefs = {
+    "Trang chủ": "/",
+    "Phản ánh kiến nghị": "/pakn-gui-pakn",
+    "Tra cứu kết quả trả lời": "/phan-anh-hien-truong",
+    "Quy trình tiếp nhận xử lý": "#",
 };
 
 export const defaultQuickLinks: MegaMenuPanelQuickLink[] = [
-  { label: "Đặt lịch khám", href: "#" },
-  { label: "Tra cứu kết quả", href: "#" },
-  { label: "Hướng dẫn thăm khám", href: "#" },
-  { label: "Bảng giá dịch vụ", href: "#" },
-  { label: "Hỏi đáp sức khỏe", href: "#" },
+    { label: "Trang chủ", href: "/" },
+    { label: "Phản ánh kiến nghị", href: "/pakn-gui-pakn" },
+    { label: "Tra cứu kết quả trả lời", href: "/phan-anh-hien-truong" },
+    { label: "Quy trình tiếp nhận xử lý", href: "#" },
 ];

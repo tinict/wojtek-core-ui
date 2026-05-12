@@ -233,7 +233,6 @@ const BottomNavItem = <E extends keyof React.JSX.IntrinsicElements = "button">({
   const router = useRouter();
   const isActive = activeKey === navKey;
 
-  // Register/unregister this item's href with the Root
   useEffect(() => {
     if (!href) return;
     registerRoute({ navKey, href, routeMatch });
@@ -242,7 +241,6 @@ const BottomNavItem = <E extends keyof React.JSX.IntrinsicElements = "button">({
 
   const handlePress = () => {
     if (isDisabled) return;
-    // Update internal state immediately for snappy feel
     setActiveKey(navKey);
     onPress?.();
     if (href) router.push(href);
@@ -261,7 +259,7 @@ const BottomNavItem = <E extends keyof React.JSX.IntrinsicElements = "button">({
   );
 
   const sizeStyles: Record<BottomNavSize, string> = {
-    sm: "min-h-[52px] gap-0.5",
+    sm: "min-h-[50px] gap-0.5",
     md: "min-h-[60px] gap-1",
     lg: "min-h-[68px] gap-1.5",
   };
@@ -280,7 +278,7 @@ const BottomNavItem = <E extends keyof React.JSX.IntrinsicElements = "button">({
         "touch-manipulation outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-xl",
         sizeStyles[size],
         isActive
-          ? "text-primary bg-primary/10 rounded-xl"
+          ? "text-primary font-bold"
           : "text-default-400 hover:text-default-600 hover:bg-white/5",
         isDisabled
           ? "opacity-40 cursor-not-allowed"
@@ -290,16 +288,6 @@ const BottomNavItem = <E extends keyof React.JSX.IntrinsicElements = "button">({
         .filter(Boolean)
         .join(" ")}
     >
-      <span
-        data-slot="bottom-nav-pip"
-        className={[
-          "absolute bottom-1 h-1.5 rounded-full transition-all duration-300 blur-[0.5px]",
-          isActive
-            ? "w-6 bg-gradient-to-r from-primary to-primary/80 shadow-lg shadow-primary/50"
-            : "w-0 bg-transparent",
-        ].join(" ")}
-      />
-
       {badge !== undefined ? (
         <Badge
           content={String(badge)}

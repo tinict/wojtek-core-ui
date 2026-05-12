@@ -7,6 +7,7 @@ export function AppBottomNav() {
   return (
     <BottomNav 
         defaultActiveKey="home" 
+        size="sm"
         variant="default" 
         routes={["/", "/pakn-gui-pakn", "/profile"]}
     >

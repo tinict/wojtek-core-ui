@@ -1,47 +1,40 @@
 "use client";
-import { dom } from "@/utils/dom";
-import { DOMRenderProps } from "@heroui/react";
+
 import React, { createContext, useContext, type ReactNode } from "react";
 import { Group as GroupPrimitive } from "react-aria-components/Group";
 import type { ComponentPropsWithRef } from "react";
 import { composeTwRenderProps } from "@/utils/compose";
-import { Avatar } from "@heroui/react";
 
 /**
  * Branch Context
  */
 const BranchContext = createContext<any>({});
 
-interface BranchRootProps<
-    E extends keyof React.JSX.IntrinsicElements = "div",
-> extends DOMRenderProps<E, undefined> {
+/**
+ * Branch Root
+ */
+interface BranchRootProps extends React.HTMLAttributes<HTMLDivElement> {
     children: ReactNode;
     className?: string;
 }
 
-const BranchRoot = <E extends keyof React.JSX.IntrinsicElements = "div">({
-    children,
-    className,
-    ...props
-}: BranchRootProps<E> &
-    Omit<React.JSX.IntrinsicElements[E], keyof BranchRootProps<E>>) => {
+const BranchRoot = ({ children, className, ...props }: BranchRootProps) => {
     const branchChildren = React.useMemo(() => {
         if (typeof children === "string" || typeof children === "number") {
             return <BranchLabel>{children}</BranchLabel>;
         }
-
         return children;
     }, [children]);
 
     return (
         <BranchContext value={{}}>
-            <dom.div
-                {...(props as any)}
+            <div
+                {...props}
                 className={className}
                 data-slot="branch"
             >
                 {branchChildren}
-            </dom.div>
+            </div>
         </BranchContext>
     );
 };
@@ -49,34 +42,24 @@ const BranchRoot = <E extends keyof React.JSX.IntrinsicElements = "div">({
 /**
  * Branch Image
  */
-interface BranchImageProps<
-    E extends keyof React.JSX.IntrinsicElements = "img",
-> extends DOMRenderProps<E, undefined> {
+interface BranchImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
     className?: string;
 }
 
-const BranchImage = <E extends keyof React.JSX.IntrinsicElements = "img">({
-    className,
-    ...props
-}: BranchImageProps<E> & Omit<React.JSX.IntrinsicElements[E], keyof BranchImageProps<E>>) => {
-
+const BranchImage = ({ className, ...props }: BranchImageProps) => {
     return (
-        <dom.img
+        <img
             className={className}
             data-slot="branch-image"
-            {...(props as any)}
+            {...props}
         />
     );
 };
 
-
 /**
  * Branch Group
  */
-
-interface BranchGroupProps extends ComponentPropsWithRef<
-    typeof GroupPrimitive
-> {}
+interface BranchGroupProps extends ComponentPropsWithRef<typeof GroupPrimitive> {}
 
 const BranchGroup = ({ children, className, ...props }: BranchGroupProps) => {
     const { slots } = useContext(BranchContext);
@@ -89,9 +72,7 @@ const BranchGroup = ({ children, className, ...props }: BranchGroupProps) => {
         >
             {(values) => (
                 <>
-                    {typeof children === "function"
-                        ? children(values)
-                        : children}
+                    {typeof children === "function" ? children(values) : children}
                 </>
             )}
         </GroupPrimitive>
@@ -101,89 +82,67 @@ const BranchGroup = ({ children, className, ...props }: BranchGroupProps) => {
 /**
  * Branch Logo
  */
-
-interface BranchLogoProps extends ComponentPropsWithRef<typeof Avatar.Image> {
+interface BranchLogoProps extends React.ImgHTMLAttributes<HTMLImageElement> {
     children?: React.ReactNode;
     className?: string;
-    customlogo?: ComponentPropsWithRef<typeof Avatar>;
-};
+}
 
+const BranchLogo = ({ children, className, src, alt = "logo", ...props }: BranchLogoProps) => {
+    if (children && React.isValidElement(children)) {
+        return React.cloneElement(
+            children as React.ReactElement<{
+                className?: string;
+                "data-slot"?: string;
+            }>,
+            { className, "data-slot": "branch-logo" },
+        );
+    }
 
-const BranchLogo = ({
-  children,
-  className,
-  ...props
-}: BranchLogoProps) => {
-
-  if (children && React.isValidElement(children)) {
-    return React.cloneElement(
-      children as React.ReactElement<{
-        className?: string;
-        "data-slot"?: string;
-      }>,
-      {
-        ...props,
-        className: className,
-        "data-slot": "branch-logo",
-      },
-    );
-  }
-
-  return (
-    <Avatar
-        {...props.customlogo}
-    >
-        <Avatar.Image
-          className={className}
-          data-slot="branch-logo"
-          {...props}
+    return (
+        <img
+            src={src}
+            alt={alt}
+            className={className}
+            data-slot="branch-logo"
+            {...props}
         />
-    </Avatar>
-  );
+    );
 };
-
 
 /**
  * Branch Label
  */
-interface BranchLabelProps<
-    E extends keyof React.JSX.IntrinsicElements = "span",
-> extends DOMRenderProps<E, undefined> {
+interface BranchLabelProps extends React.HTMLAttributes<HTMLSpanElement> {
     children?: ReactNode;
     className?: string;
 }
 
-const BranchLabel = <E extends keyof React.JSX.IntrinsicElements = "span">({
-    children,
-    className,
-    ...props
-}: BranchLabelProps<E> &
-    Omit<React.JSX.IntrinsicElements[E], keyof BranchLabelProps<E>>) => {
+const BranchLabel = ({ children, className, ...props }: BranchLabelProps) => {
     return (
-        <dom.span
+        <span
             className={className}
             data-slot="branch-label"
-            {...(props as any)}
+            {...props}
         >
             {children}
-        </dom.span>
+        </span>
     );
 };
 
 /**
  * Exports
  */
-export { 
-    BranchRoot, 
-    BranchLabel, 
+export {
+    BranchRoot,
+    BranchLabel,
     BranchGroup,
     BranchLogo,
-    BranchImage
+    BranchImage,
 };
-export type { 
-    BranchRootProps, 
-    BranchLabelProps, 
-    BranchGroupProps, 
+export type {
+    BranchRootProps,
+    BranchLabelProps,
+    BranchGroupProps,
     BranchLogoProps,
-    BranchImageProps
+    BranchImageProps,
 };

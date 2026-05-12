@@ -1,11 +1,11 @@
 import type { ComponentProps } from "react";
 
 import {
-    BranchGroup, 
-    BranchImage, 
-    BranchLabel, 
-    BranchLogo, 
-    BranchRoot
+    BranchGroup,
+    BranchImage,
+    BranchLabel,
+    BranchLogo,
+    BranchRoot,
 } from "./branch";
 
 /**
@@ -16,7 +16,7 @@ export const Branch = Object.assign(BranchRoot, {
     Label: BranchLabel,
     Group: BranchGroup,
     Logo: BranchLogo,
-    Image: BranchImage
+    Image: BranchImage,
 });
 
 export type Branch = {
@@ -31,12 +31,12 @@ export type Branch = {
 /**
  * Named Component
  */
-export { 
-    BranchRoot, 
-    BranchLabel, 
+export {
+    BranchRoot,
+    BranchLabel,
     BranchGroup,
     BranchLogo,
-    BranchImage
+    BranchImage,
 };
 export type {
     BranchRootProps,
@@ -44,5 +44,5 @@ export type {
     BranchLabelProps,
     BranchGroupProps,
     BranchLogoProps,
-    BranchImageProps
+    BranchImageProps,
 } from "./branch";

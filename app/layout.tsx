@@ -1,16 +1,15 @@
 import "@/styles/globals.css";
-import { Metadata, Viewport } from "next";
+import { GetServerSidePropsContext, Metadata, Viewport } from "next";
 import clsx from "clsx";
+import { headers } from "next/headers";
+import { getLocalizationScript } from "@heroui/react";
 
 import { Providers } from "./providers";
-
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
-import { Navbar } from "@/components/navbar";
-import { SubNavbar } from "@/components/subNavbar";
-import { AppBottomNav } from "@/components/app-bottom-nav";
 import RegisterSW from "@/components/register-sw";
 import PWAInstallPrompt from "@/components/pwa-install-prompt";
+import { getIsSsrMobile } from "@/lib/getIsSsrMobile";
 
 export const metadata: Metadata = {
   title: {
@@ -33,28 +32,36 @@ export const viewport: Viewport = {
   viewportFit: "cover",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const headersList = await headers();
+  const userAgent = headersList.get("user-agent") || "";
+  const context = { req: { headers: { "user-agent": userAgent } } } as GetServerSidePropsContext;
+  const isSsrMobile = getIsSsrMobile(context);
+
   return (
     <html suppressHydrationWarning lang="en">
       <head>
+        <script
+          dangerouslySetInnerHTML={{ __html: getLocalizationScript("en-US") }}
+        />
         <link rel="icon" type="image/png" sizes="32x32" href="/icon512_maskable.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icon512_maskable.png" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#FFFFFFF" />
-        <meta name="apple-mobile-web-app-capable" content="yes"></meta>
-        <meta name="apple-mobile-web-app-status-bar-style" content="default"></meta>
-        <meta name="apple-mobile-web-app-title" content={siteConfig.name}></meta>
-        <link rel="apple-touch-startup-image" href="/images/splash/launch-640x1136.png" sizes='640x1136' />
-        <link rel="apple-touch-startup-image" href="/images/splash/launch-750x1294.png" sizes='750x1334' />
-        <link rel="apple-touch-startup-image" href="/images/splash/launch-1242x2148.png" sizes='1242x2148' />
-        <link rel="apple-touch-startup-image" href="/images/splash/launch-1125x2436.png" sizes='1125x2436' />
-        <link rel="apple-touch-startup-image" href="/images/splash/launch-1536x2048.png" sizes='1536x2048' />
-        <link rel="apple-touch-startup-image" href="/images/splash/launch-1668x2224.png" sizes='1668x2224' />
-        <link rel="apple-touch-startup-image" href="/images/splash/launch-2048x2732.png" sizes='2048x2732' />
+        <meta name="theme-color" content="#FFFFFF" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content={siteConfig.name} />
+        <link rel="apple-touch-startup-image" href="/images/splash/launch-640x1136.png" sizes="640x1136" />
+        <link rel="apple-touch-startup-image" href="/images/splash/launch-750x1294.png" sizes="750x1334" />
+        <link rel="apple-touch-startup-image" href="/images/splash/launch-1242x2148.png" sizes="1242x2148" />
+        <link rel="apple-touch-startup-image" href="/images/splash/launch-1125x2436.png" sizes="1125x2436" />
+        <link rel="apple-touch-startup-image" href="/images/splash/launch-1536x2048.png" sizes="1536x2048" />
+        <link rel="apple-touch-startup-image" href="/images/splash/launch-1668x2224.png" sizes="1668x2224" />
+        <link rel="apple-touch-startup-image" href="/images/splash/launch-2048x2732.png" sizes="2048x2732" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -73,28 +80,13 @@ export default function RootLayout({
           fontSans.variable,
         )}
       >
-        <Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
-          <div className="relative flex flex-col h-screen">
-            <SubNavbar />
-            <Navbar />
-            <main className="container mx-auto max-w-7xl pt-4 px-6 flex-grow">
-              <RegisterSW />
-              <PWAInstallPrompt />
-              {children}
-            </main>
-            <AppBottomNav />
-            <footer className="w-full flex items-center justify-center py-3">
-              <a
-                className="flex items-center gap-1 text-current no-underline"
-                href="https://heroui.com?utm_source=next-app-template"
-                rel="noopener noreferrer"
-                target="_blank"
-              >
-                <span className="text-muted">Powered by</span>
-                <p className="text-accent">HeroUI</p>
-              </a>
-            </footer>
-          </div>
+        <Providers
+          themeProps={{ attribute: "class", defaultTheme: "light" }}
+          isMobile={isSsrMobile}
+        >
+          <RegisterSW />
+          <PWAInstallPrompt />
+          {children}
         </Providers>
       </body>
     </html>
