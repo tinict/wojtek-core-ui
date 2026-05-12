@@ -2,7 +2,6 @@ import "@/styles/globals.css";
 import { GetServerSidePropsContext, Metadata, Viewport } from "next";
 import clsx from "clsx";
 import { headers } from "next/headers";
-import { getLocalizationScript } from "@heroui/react";
 
 import { Providers } from "./providers";
 import { siteConfig } from "@/config/site";
@@ -45,9 +44,6 @@ export default async function RootLayout({
   return (
     <html suppressHydrationWarning lang="en">
       <head>
-        <script
-          dangerouslySetInnerHTML={{ __html: getLocalizationScript("en-US") }}
-        />
         <link rel="icon" type="image/png" sizes="32x32" href="/icon512_maskable.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/icon512_maskable.png" />
         <link rel="manifest" href="/manifest.json" />
