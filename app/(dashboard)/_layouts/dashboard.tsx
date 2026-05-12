@@ -19,6 +19,11 @@ const NAV_ITEMS = [
     label: "Danh mục đơn vị",
     href: "/dashboard/units",
   },
+  {
+    icon: User,
+    label: "Danh mục loại khu vực",
+    href: "/dashboard/area-type-ref",
+  },
 ];
 
 export default function Dashboard({

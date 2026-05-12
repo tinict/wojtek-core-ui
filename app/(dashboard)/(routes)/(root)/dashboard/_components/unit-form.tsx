@@ -23,36 +23,19 @@ import {
 import type { FacilityPayload } from "../units/types";
 
 import { EMPTY_FORM } from "../units/constants";
-
-const FACILITY_TYPES = [
-    "Bệnh viện",
-    "Phòng khám",
-    "Trung tâm y tế",
-    "Nhà thuốc",
-] as const;
-
-const FACILITY_STATUS = ["Hoạt động", "Tạm dừng", "Đóng cửa"] as const;
+import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
-    code: z.string().min(1, "Vui lòng nhập mã đơn vị"),
-
-    name: z.string().min(1, "Vui lòng nhập tên đơn vị"),
-
-    type: z.enum(FACILITY_TYPES),
-
-    parentUnit: z.string().optional(),
-
-    province: z.string().min(1, "Vui lòng nhập tỉnh/thành phố"),
-
-    district: z.string().min(1, "Vui lòng nhập quận/huyện"),
-
-    address: z.string().min(1, "Vui lòng nhập địa chỉ"),
-
-    phone: z.string().min(1, "Vui lòng nhập số điện thoại"),
-
-    status: z.enum(FACILITY_STATUS),
-
-    createdAt: z.string().min(1, "Vui lòng chọn ngày tạo"),
+    short_code: z.string().min(1, "Mã đơn vị khôn với 1 ky tự").max(20, "Mã đơn vị khôn với 20 ky tự"),
+    area_name: z.string().min(1, "Tên đơn vị khôn với 1 ky tự").max(100, "Tên đơn vị khôn với 100 ky tự"),
+    area_type_rcd: z.string().min(1, "Loại khôn với 1 ky tự").max(100, "Loại khôn với 100 ky tự"),
+    area_name_l: z.string().min(1, "T	TokenName khôn với 1 ky tự").max(100, "Mã khu vực với 100 ky tự"),
+    area_name_e: z.string().min(1, "T	TokenName khôn với 1 ky tự").max(100, "Mã khu vực với 100 ky tự"),
+    parent_area_id: z.string().min(1, "Mã đơn vị khôn với 1 ky tự").max(20, "Mã đơn vị khôn với 20 ky tự"),
+    active_flag: z.string().min(1, "Mã đơn vị khôn với 1 ky tự").max(20, "Mã đơn vị khôn với 20 ky tự"),
+    lu_user_id: z.string().min(1, "Mã đơn vị khôn với 1 ky tự").max(20, "Mã đơn vị khôn với 20 ky tự"),
+    lu_updated: z.string().min(1, "Mã đơn vị khôn với 1 ky tự").max(20, "Mã đơn vị khôn với 20 ky tự"),
+    lu_created: z.string().min(1, "Mã đơn vị khôn với 1 ky tự").max(20, "Mã đơn vị khôn với 20 ky tự"),
 });
 
 type FacilityFormValues = z.infer<typeof formSchema>;
@@ -64,13 +47,9 @@ export type Option = {
 
 interface FacilityFormProps {
     initialData?: FacilityPayload | null;
-
     parentUnitOptions?: Option[];
-
     typeOptions?: Option[];
-
     statusOptions?: Option[];
-
     onSubmit: (values: FacilityPayload) => void;
 }
 
@@ -82,19 +61,14 @@ type BaseField = {
 
 type InputField = BaseField & {
     component: "input";
-
     placeholder?: string;
-
     inputType?: string;
 };
 
 type SelectField = BaseField & {
     component: "select";
-
     placeholder?: string;
-
     options?: Option[];
-
     optionsApi?: string;
 };
 
@@ -107,7 +81,6 @@ export function UnitForm({
     initialData,
     parentUnitOptions = [],
     typeOptions = [],
-    statusOptions = [],
     onSubmit,
 }: FacilityFormProps) {
     const form = useForm<FacilityFormValues>({
@@ -120,83 +93,45 @@ export function UnitForm({
         form.reset((initialData ?? EMPTY_FORM) as FacilityFormValues);
     }, [initialData, form]);
 
-    const fields: FieldConfig[] = useMemo(
+   const fields: FieldConfig[] = useMemo(
         () => [
             {
-                name: "code",
-                label: "Mã đơn vị",
+                name: "short_code",
+                label: "Mã mã khu vực",
                 component: "input",
-                placeholder: "VD: BV-001",
+                placeholder: "VD: ODA1TD03",
             },
-
             {
-                name: "name",
-                label: "Tên đơn vị",
+                name: "area_name",
+                label: "Tên khu vực",
                 component: "input",
-                placeholder: "Tên đơn vị",
+                placeholder: "Tên khu vực",
             },
-
             {
-                name: "type",
-                label: "Loại cơ sở",
+                name: "area_name_e",
+                label: "Tên khu vực English",
+                component: "input",
+                placeholder: "Tên khu vực",
+            },
+            {
+                name: "area_type_rcd",
+                label: "Loại",
                 component: "select",
-                placeholder: "Chọn loại cơ sở",
+                placeholder: "Chọn loại",
                 options: typeOptions,
             },
-
             {
-                name: "status",
-                label: "Trạng thái",
+                name: "parent_area_id",
+                label: "Thuộc khu vực",
                 component: "select",
-                placeholder: "Chọn trạng thái",
-                options: statusOptions,
-            },
-
-            {
-                name: "parentUnit",
-                label: "Đơn vị cấp trên",
-                component: "select",
-                placeholder: "Chọn đơn vị",
+                placeholder: "Chọn khu vực",
                 options: parentUnitOptions,
-            },
-
-            {
-                name: "province",
-                label: "Tỉnh / Thành phố",
-                component: "input",
-                placeholder: "VD: Hồ Chí Minh",
-            },
-
-            {
-                name: "district",
-                label: "Quận / Huyện",
-                component: "input",
-                placeholder: "VD: Quận 1",
-            },
-
-            {
-                name: "address",
-                label: "Địa chỉ",
-                component: "input",
-                placeholder: "Số nhà, tên đường...",
-            },
-
-            {
-                name: "phone",
-                label: "Điện thoại",
-                component: "input",
-                placeholder: "VD: 0909123456",
-            },
-
-            {
-                name: "createdAt",
-                label: "Ngày tạo",
-                component: "input",
-                inputType: "date",
-            },
+            }
         ],
-        [parentUnitOptions, typeOptions, statusOptions],
+        [parentUnitOptions, typeOptions]
     );
+
+    const { isSubmitting, isValid } = form.formState;
 
     const handleSubmit = (values: FacilityFormValues) => {
         onSubmit(values);
@@ -207,43 +142,55 @@ export function UnitForm({
             <form
                 id="facility-form"
                 onSubmit={form.handleSubmit(handleSubmit)}
-                className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-5 py-4"
+                className="space-y-4"
             >
-                {fields.map((item) => (
-                    <FormField
-                        key={item.name}
-                        control={form.control}
-                        name={item.name}
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormLabel>{item.label}</FormLabel>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 px-5 py-4">
+                    {fields.map((item) => (
+                        <FormField
+                            key={item.name}
+                            control={form.control}
+                            name={item.name}
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>{item.label}</FormLabel>
 
-                                <FormControl>
-                                    {item.component === "select" ? (
-                                        <Combobox
-                                            optionLabel={
-                                                item.placeholder ?? "Chọn"
-                                            }
-                                            options={item.options ?? []}
-                                            value={String(field.value ?? "")}
-                                            onChange={field.onChange}
-                                        />
-                                    ) : (
-                                        <Input
-                                            {...field}
-                                            type={item.inputType ?? "text"}
-                                            value={String(field.value ?? "")}
-                                            placeholder={item.placeholder ?? ""}
-                                            className={INPUT_CLS}
-                                        />
-                                    )}
-                                </FormControl>
+                                    <FormControl>
+                                        {item.component === "select" ? (
+                                            <Combobox
+                                                optionLabel={
+                                                    item.placeholder ?? "Chọn"
+                                                }
+                                                options={item.options ?? []}
+                                                value={String(field.value ?? "")}
+                                                onChange={field.onChange}
+                                            />
+                                        ) : (
+                                            <Input
+                                                {...field}
+                                                type={item.inputType ?? "text"}
+                                                value={String(field.value ?? "")}
+                                                placeholder={item.placeholder ?? ""}
+                                                className={INPUT_CLS}
+                                            />
+                                        )}
+                                    </FormControl>
 
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
-                ))}
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+                    ))}
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-6 gap-4 px-5">
+                    <Button
+                        disabled={!isValid || isSubmitting}
+                        type="submit"
+                        size="sm"
+                    >
+                        Lưu
+                    </Button>
+                </div>
             </form>
         </Form>
     );
