@@ -11,8 +11,6 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { UnitForm } from "../_components/unit-form";
-
 import type {
   Area,
   FacilityStatus,
@@ -26,6 +24,7 @@ import {
   COLUMNS,
   EMPTY_FORM,
 } from "./constants";
+import { AreaTypeRefForm } from "../_components/area-type-ref-form";
 
 export default function DanhMucCoSoPage() {
   const [search, setSearch] =
@@ -332,16 +331,10 @@ export default function DanhMucCoSoPage() {
         </SlideOver.Header>
 
         <SlideOver.Body>
-          <UnitForm
-            initialData={
-              editTarget
-                ? {
-                    ...editTarget,
-                  }
-                : EMPTY_FORM
-            }
-            parentUnitOptions={[]}
-            onSubmit={handleSubmit}
+          <AreaTypeRefForm 
+            onSubmit={function (v: { area_type_rcd: string; area_type_name: string; area_type_name_e: string; active_flag: string; }): void {
+              throw new Error("Function not implemented.");
+            }}
           />
         </SlideOver.Body>
       </SlideOver>

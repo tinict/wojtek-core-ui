@@ -24,6 +24,21 @@ const NAV_ITEMS = [
     label: "Danh mục loại khu vực",
     href: "/dashboard/area-type-ref",
   },
+  {
+    icon: User,
+    label: "Danh mục loại phản ánh",
+    href: "/dashboard/inquiry-classification",
+  },
+  {
+    icon: User,
+    label: "Danh mục chủ đề PA",
+    href: "/dashboard/inquiry-topic",
+  },
+  {
+    icon: User,
+    label: "Công việc thực hiện",
+    href: "/dashboard/todos",
+  },
 ];
 
 export default function Dashboard({

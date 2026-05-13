@@ -24,7 +24,6 @@ export interface NavMenuEntry {
     sections: NavMenuSection[];
 }
 
-// Thêm href vào để nav biết navigate đi đâu khi null (không có mega menu)
 export type NavMenuData = Record<string, NavMenuEntry | null>;
 
 export interface NavHrefs {

@@ -11,7 +11,7 @@ import {
   Trash2,
 } from "lucide-react";
 
-import { AreaForm, UserForm } from "../_components/unit-form";
+import { AreaForm } from "../_components/unit-form";
 
 import type {
   Area,
@@ -24,8 +24,9 @@ import {
   PAGE_SIZE,
   STATUS_OPTIONS,
   COLUMNS,
-  EMPTY_FORM,
 } from "./constants";
+import { InquiryClassificationForm } from "../_components/inquiry-classification-form";
+import { InquiryTopicForm } from "../_components/inquiry-topic-form";
 
 export default function DanhMucCoSoPage() {
   const [search, setSearch] =
@@ -332,10 +333,10 @@ export default function DanhMucCoSoPage() {
         </SlideOver.Header>
 
         <SlideOver.Body>
-          <AreaForm 
-            onSubmit={function (v: { short_code: string; area_name: string; area_name_e: string; area_type_rcd: string; parent_area_id: string; }): void {
-            throw new Error("Function not implemented.");
-            }} 
+          <InquiryTopicForm 
+            onSubmit={function (v: { inquiry_topic_name: string; inquiry_topic_name_e: string; inquiry_topic_department_id: string; description: string; active_flag: string; }): void {
+              throw new Error("Function not implemented.");
+            }}
           />
         </SlideOver.Body>
       </SlideOver>
