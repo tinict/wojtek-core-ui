@@ -1,7 +1,11 @@
 "use client"
 
 import { useGetTodos } from "@/hooks/use-todo";
-import { ColumnDef, DataTable, RowAction } from "../../_components/data-table";
+import { 
+    ColumnDef, 
+    DataTable, 
+    RowAction 
+} from "../../_components/data-table";
 import { Todo } from "../types";
 import { Edit2, Trash2 } from "lucide-react";
 

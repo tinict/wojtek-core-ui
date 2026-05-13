@@ -34,8 +34,8 @@ const areaFields: FieldConfig<InquiryClassificationValues>[] = [
   {
     name: "active_flag",
     type: "select",
-    label: "Hoạt động",
-    placeholder: "Hoạt động",
+    label: "Trạng thái",
+    placeholder: "Trạng thái",
     options: [
       { value: "1", label: "Hoạt động" },
       { value: "0", label: "Không hoạt động" }

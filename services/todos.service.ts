@@ -18,6 +18,32 @@ class TodoService {
             }
         }
     }
+
+    async createTodo({
+        id,
+        title,
+        body,
+        userId
+    }: ITodo): Promise<Response<ITodo>> {
+        try {
+            const res = await api.post(`/posts`, {
+                id,
+                title,
+                body,
+                userId
+            })
+            return {
+                message: "Success",
+                statusCode: 200,
+                data: res.data,
+            }
+        } catch (error: any) {
+            return {
+                success: false,
+                data: error.message,
+            }
+        }
+    }
 }
 
 export default new TodoService();

@@ -14,13 +14,15 @@ const todoFields: FieldConfig<TodoValues>[] = [
         label: "Tiêu đề",
         placeholder: "Nhập tiêu đề",
         required: true,
+        fullWidth: true
     },
     {
         name: "body",
-        type: "input",
+        type: "textarea",
         label: "Mô tả",
         placeholder: "Nhập mô tả",
         required: true,
+        fullWidth: true
     },
 ];
 

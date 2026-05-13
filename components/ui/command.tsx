@@ -166,11 +166,11 @@ const CommandItem = React.forwardRef<
       rounded-md px-2 py-2 text-sm outline-none
       transition-colors
 
-      hover:bg-accent
+      hover:bg-[F0F0F0]
       hover:text-accent-foreground
 
-      aria-selected:bg-accent
-      aria-selected:text-accent-foreground
+      aria-selected:bg-[#F0F0F0]
+      aria-selected:text-amber-950
 
       data-[disabled=true]:pointer-events-none
       data-[disabled=true]:opacity-50

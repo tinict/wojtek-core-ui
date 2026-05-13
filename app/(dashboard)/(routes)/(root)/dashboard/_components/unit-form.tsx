@@ -7,6 +7,7 @@ const areaSchema = z.object({
   area_name_e: z.string().min(1).max(100),
   area_type_rcd: z.string().min(1),
   parent_area_id: z.string().min(1),
+  active_flag: z.string().min(1),
 });
 type AreaValues = z.infer<typeof areaSchema>;
 
@@ -51,6 +52,16 @@ const areaFields: FieldConfig<AreaValues>[] = [
       { value: "2", label: "Khu B" },
     ],
   },
+  {
+    name: "active_flag",
+    type: "select",
+    label: "Trạng thái",
+    placeholder: "Chọn trạng thái",
+    options: [
+      { value: "1", label: "Hoạt động" },
+      { value: "0", label: "Không hoạt động" },
+    ],
+  },
 ];
 
 const AREA_EMPTY: AreaValues = {
@@ -59,6 +70,7 @@ const AREA_EMPTY: AreaValues = {
   area_name_e: "",
   area_type_rcd: "",
   parent_area_id: "",
+  active_flag: "",
 };
 
 export function AreaForm({

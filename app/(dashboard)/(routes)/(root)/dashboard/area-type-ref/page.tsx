@@ -3,10 +3,8 @@
 import { useState } from "react";
 
 import { DataPanel } from "@/components/wojtek-ui/data-panel";
-import { SlideOver } from "@/components/wojtek-ui/slide-over";
 
 import {
-  Building2,
   Edit2,
   Trash2,
 } from "lucide-react";
@@ -22,9 +20,9 @@ import {
   PAGE_SIZE,
   STATUS_OPTIONS,
   COLUMNS,
-  EMPTY_FORM,
 } from "./constants";
 import { AreaTypeRefForm } from "../_components/area-type-ref-form";
+import SlideOverLayout from "@/app/(dashboard)/_layouts/slide-over-layout";
 
 export default function DanhMucCoSoPage() {
   const [search, setSearch] =
@@ -309,35 +307,17 @@ export default function DanhMucCoSoPage() {
         </div>
       </DataPanel>
 
-      <SlideOver
-        open={showSlide}
-        onClose={closeSlide}
-        side="right"
-        width="780px"
+      <SlideOverLayout 
+        showSlide={showSlide}
+        closeSlide={closeSlide}
+        title={editTarget ? "Cập nhật loại khu vực" : "Thêm khu vực"}
       >
-        <SlideOver.Header>
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#1a2445]">
-            <Building2
-              size={15}
-              className="text-[#f5a623]"
-            />
-          </div>
-
-          <SlideOver.Title>
-            {editTarget
-              ? "Chỉnh sửa khu vực"
-              : "Thêm khu vực"}
-          </SlideOver.Title>
-        </SlideOver.Header>
-
-        <SlideOver.Body>
           <AreaTypeRefForm 
             onSubmit={function (v: { area_type_rcd: string; area_type_name: string; area_type_name_e: string; active_flag: string; }): void {
               throw new Error("Function not implemented.");
             }}
           />
-        </SlideOver.Body>
-      </SlideOver>
+      </SlideOverLayout>
     </div>
   );
 }

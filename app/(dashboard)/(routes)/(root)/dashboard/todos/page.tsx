@@ -1,17 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { Building2 } from "lucide-react";
-import { SlideOver } from "@/components/wojtek-ui/slide-over";
 
 import { Todo } from "./types";
 import { TodoForm, TodoValues } from "../_components/todo-form";
 import TodoTableClient from "./_component/todo-table-client";
-
+import { useCreateTodo } from "@/hooks/use-todo";
+import SlideOverLayout from "@/app/(dashboard)/_layouts/slide-over-layout";
 
 export default function DanhMucCoSoPage() {
     const [showSlide, setShowSlide] = useState(false);
     const [editTarget, setEditTarget] = useState<Todo | null>(null);
+    const {
+        mutateAsync: createTodo,
+        status
+    } = useCreateTodo();
 
     const openCreate = () => {
         setEditTarget(null);
@@ -32,7 +35,12 @@ export default function DanhMucCoSoPage() {
         if (editTarget) {
             console.log("UPDATE", { area_id: editTarget.id, ...values });
         } else {
-            console.log("CREATE", { area_id: crypto.randomUUID(), ...values });
+            createTodo({
+                title: values.title,
+                body: values.body,
+                id: "",
+                userId: "1"
+            });
         }
         closeSlide();
     };
@@ -50,29 +58,16 @@ export default function DanhMucCoSoPage() {
                 openEdit={openEdit} 
                 openCreate={openCreate}
             />
-
-            <SlideOver
-                open={showSlide}
-                onClose={closeSlide}
-                side="right"
-                width="780px"
+            <SlideOverLayout 
+                showSlide={showSlide}
+                closeSlide={closeSlide}
+                title={editTarget ? "Cập nhật bài đăng" : "Thêm bài đăng"}
             >
-                <SlideOver.Header>
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#1a2445]">
-                        <Building2 size={15} className="text-white" />
-                    </div>
-                    <SlideOver.Title>
-                        {editTarget ? "Chỉnh sửa công việc" : "Tạo công việc"}
-                    </SlideOver.Title>
-                </SlideOver.Header>
-
-                <SlideOver.Body>
-                    <TodoForm
-                        initialData={formInitialData}
-                        onSubmit={handleSubmit}
-                    />
-                </SlideOver.Body>
-            </SlideOver>
+                <TodoForm
+                    initialData={formInitialData}
+                    onSubmit={handleSubmit}
+                />
+            </SlideOverLayout>
         </div>
     );
 }

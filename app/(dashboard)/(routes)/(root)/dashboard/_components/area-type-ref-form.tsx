@@ -33,8 +33,8 @@ const areaFields: FieldConfig<AreaTypeRefValues>[] = [
   {
     name: "active_flag",
     type: "select",
-    label: "Tên loại khu vực (EN)",
-    placeholder: "Tên loại khu vực (EN)",
+    label: "Trạng thái",
+    placeholder: "Trạng thái",
     options: [
       { value: "1", label: "Hoạt động" },
       { value: "0", label: "Không hoạt động" }

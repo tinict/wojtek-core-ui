@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback, ReactNode } from "react";
-import { Search, Plus, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { Search, X, ChevronLeft, ChevronRight } from "lucide-react";
 
 import {
   Table,
@@ -11,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 
 export type SelectOption = { value: string; label: string };
 
@@ -21,21 +22,21 @@ export interface ColumnDef<T> {
   cellClassName?: string;
   headerClassName?: string;
   hidden?: boolean;
-}
+};
 
 export interface RowAction<T> {
   icon: ReactNode;
   label: string;
   onClick: (row: T) => void;
   danger?: boolean;
-}
+};
 
 export interface FilterDef {
   key: string;
   label: string;
   options: SelectOption[];
   widthCls?: string;
-}
+};
 
 export interface ToolbarConfig<T> {
   searchPlaceholder?: string;
@@ -49,7 +50,7 @@ export interface ToolbarConfig<T> {
   onAdd?: () => void;
   addLabel?: string;
   extraControls?: ReactNode;
-}
+};
 
 export interface DataTableProps<T> {
   data: T[];
@@ -61,7 +62,7 @@ export interface DataTableProps<T> {
   emptyText?: string;
   summary?: (count: number) => ReactNode;
   className?: string;
-}
+};
 
 function safeStr(v: unknown): string {
   if (v === null || v === undefined) return "";
@@ -214,23 +215,23 @@ export function DataTable<T>({
           <div className="flex-1" />
 
           {hasDirtyFilters && (
-            <button
+            <Button
               type="button"
               onClick={handleClear}
               className="flex h-9 items-center gap-1.5 rounded-lg border border-[#e8eaf0] bg-white px-3 text-sm text-[#6e80a8] transition hover:border-[#cbd0de] hover:text-[#1a2445]"
             >
               <X size={13} /> Xóa bộ lọc
-            </button>
+            </Button>
           )}
 
           {toolbar.onAdd && (
-            <button
+            <Button
               type="button"
+              variant="basic"
               onClick={toolbar.onAdd}
-              className="flex h-9 items-center gap-1.5 rounded-lg bg-[#1a2445] px-4 text-sm font-semibold text-white transition hover:bg-[#253264]"
             >
-              <Plus size={14} /> {toolbar.addLabel ?? "Thêm mới"}
-            </button>
+                {toolbar.addLabel ?? "Thêm mới"}
+            </Button>
           )}
         </div>
       )}

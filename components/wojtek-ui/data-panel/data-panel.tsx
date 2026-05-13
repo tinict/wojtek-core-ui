@@ -702,8 +702,6 @@ const DataPanelTableFooter = ({ children, totalPages, currentPage = 1, onPageCha
     return null;
 };
 
-// ─── Compound objects ────────────────────────────────────────────────────────
-
 const DataPanelControl_ = Object.assign(DataPanelControl, {
     Row: DataPanelControlRow,
     Fieldset: DataPanelControlFieldset,
