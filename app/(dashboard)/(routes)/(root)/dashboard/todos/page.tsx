@@ -1,34 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Building2, Edit2, Trash2 } from "lucide-react";
+import { Building2 } from "lucide-react";
 import { SlideOver } from "@/components/wojtek-ui/slide-over";
 
-import { ColumnDef, DataTable, RowAction } from "../_components/data-table";
 import { Todo } from "./types";
 import { TodoForm, TodoValues } from "../_components/todo-form";
-import { useGetTodos } from "@/hooks/use-todo";
+import TodoTableClient from "./_component/todo-table-client";
 
-const columns: ColumnDef<Todo>[] = [
-    {
-        key: "id",
-        header: "Mã bài viết",
-    },
-    {
-        key: "title",
-        header: "Tiêu đề",
-    },
-    {
-        key: "body",
-        header: "Nội dung",
-    },
-];
 
 export default function DanhMucCoSoPage() {
     const [showSlide, setShowSlide] = useState(false);
     const [editTarget, setEditTarget] = useState<Todo | null>(null);
-
-    const { data, status } = useGetTodos()
 
     const openCreate = () => {
         setEditTarget(null);
@@ -54,20 +37,6 @@ export default function DanhMucCoSoPage() {
         closeSlide();
     };
 
-    const actions = (row: Todo): RowAction<Todo>[] => [
-        {
-            icon: <Edit2 size={13} />,
-            label: "Chỉnh sửa",
-            onClick: openEdit,
-        },
-        {
-            icon: <Trash2 size={13} />,
-            label: "Xóa",
-            danger: true,
-            onClick: (r) => console.log("DELETE", r.id),
-        },
-    ];
-
     const formInitialData: TodoValues | null = editTarget
         ? {
               title: editTarget.title,
@@ -77,21 +46,9 @@ export default function DanhMucCoSoPage() {
 
     return (
         <div className="min-h-full bg-[#f4f6fb] p-3 sm:p-6">
-            <DataTable
-                data={Array.isArray(data?.data) ? data.data : []}
-                columns={columns}
-                rowKey={(row) => row.id ?? ""}
-                actions={actions}
-                pageSize={10}
-                emptyText="Không tìm thấy cơ sở nào phù hợp."
-                summary={(count) => <span>{count} cơ sở</span>}
-                toolbar={{
-                    searchPlaceholder: "Tên cơ sở, mã cơ sở...",
-                    searchKeys: ["title", "body"],
-                    filters: [],
-                    onAdd: openCreate,
-                    addLabel: "Thêm mới",
-                }}
+            <TodoTableClient 
+                openEdit={openEdit} 
+                openCreate={openCreate}
             />
 
             <SlideOver
