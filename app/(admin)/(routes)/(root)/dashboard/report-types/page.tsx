@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import SlideOverLayout from "@/app/(dashboard)/_layouts/slide-over-layout";
+import SlideOverLayout from "@/app/(admin)/_layouts/slide-over-layout";
 import ReportTypeTableClient from "./_component/report-type-table-client";
 import { IReportType } from "@/types/models/report-type.model";
 import { ReportTypeForm, ReportTypeValues } from "./_component/report-type-form";

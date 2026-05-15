@@ -7,7 +7,7 @@ import { Edit2, Trash2, Plus, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import SlideOverLayout from "@/app/(dashboard)/_layouts/slide-over-layout";
+import SlideOverLayout from "@/app/(admin)/_layouts/slide-over-layout";
 import { Label } from "@/components/ui/label";
 
 export interface BaseTreeNode {

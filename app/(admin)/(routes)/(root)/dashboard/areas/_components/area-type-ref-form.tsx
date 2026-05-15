@@ -1,7 +1,6 @@
 import * as z from "zod";
-import { DynamicForm, FieldConfig } from "./dynamic-form";
-import { Label } from "@/components/ui/label";
 import { MapPinIcon } from "lucide-react";
+import { DynamicForm, FieldConfig } from "../../_components/dynamic-form";
 
 const areaSchema = z.object({
     areaName: z.string().min(1, "Bắt buộc").max(200),
@@ -22,20 +21,20 @@ const areaFields: FieldConfig<AreaValues>[] = [
         name: "areaName",
         type: "input",
         label: "Tên khu vực",
-        placeholder: "Bệnh viện TW Test",
+        placeholder: "Tên khu vực",
         required: true,
     },
     {
         name: "areaNameE",
         type: "input",
         label: "Tên khu vực (EN)",
-        placeholder: "Hospital Name in English",
+        placeholder: "Tên khu vực bằng (EN)",
     },
     {
         name: "areaNameL",
         type: "input",
-        label: "Tên khu vực (địa phương)",
-        placeholder: "Tên địa phương",
+        label: "Tên khu vực (gọi khác)",
+        placeholder: "Tên gọi khác",
     },
     {
         name: "areaTypeRcd",

@@ -5,7 +5,7 @@ import { AreaTypeRefForm, AreaValues } from "../_components/area-type-ref-form";
 import {
     BaseTreeNode,
     TreePageLayout,
-} from "@/app/(dashboard)/_layouts/tree-layout";
+} from "@/app/(admin)/_layouts/tree-layout";
 import { useGetAreas, useCreateArea } from "@/hooks/use-area";
 import { IArea, IAreaTree } from "@/types/models/area.model";
 

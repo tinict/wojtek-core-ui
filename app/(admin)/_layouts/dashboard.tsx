@@ -6,36 +6,26 @@ import Navbar from "../_components/navbar";
 import SubNavbar from "../_components/sub-navbar";
 import Sidebar from "../_components/sidebar";
 import MobileSlidebar from "../_components/mobile-slidebar";
-import { User } from "lucide-react";
+import { ClipboardList, Home, MapPinned, Tags } from "lucide-react";
 
 const NAV_ITEMS = [
   {
-    icon: User,
-    label: "Trang chủ",
+    icon: Home,
+    label: "Bảng điều khiển",
     href: "/dashboard",
   },
   {
-    icon: User,
-    label: "Tiếp nhận",
-    href: "/dashboard/reports",
-  },
-  {
-    icon: User,
+    icon: MapPinned,
     label: "Danh mục khu vực",
-    href: "/dashboard/area-type-ref",
+    href: "/dashboard/areas",
   },
   {
-    icon: User,
-    label: "Loại khu vực",
-    href: "/dashboard/units",
-  },
-  {
-    icon: User,
+    icon: ClipboardList,
     label: "Loại phản ánh",
     href: "/dashboard/report-types",
   },
   {
-    icon: User,
+    icon: Tags,
     label: "Chủ đề phản ánh",
     href: "/dashboard/report-subjects",
   },
