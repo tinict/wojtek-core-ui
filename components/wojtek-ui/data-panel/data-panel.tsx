@@ -33,7 +33,7 @@ export interface SelectOption {
     value: string;
     label: string;
     description?: string;
-};
+}
 
 export interface CheckboxOption {
     value: string;
@@ -49,7 +49,7 @@ export interface RadioOption {
 
 interface DataPanelCtx {
     size?: "sm" | "md" | "lg";
-};
+}
 const DataPanelContext = createContext<DataPanelCtx>({});
 
 interface TableSlotCtx {
@@ -71,7 +71,7 @@ const DataPanelRoot = ({ children, size = "md", className = "" }: DataPanelRootP
     <DataPanelContext value={{ size }}>
         <div
             data-slot="data-panel"
-            className={`rounded-2xl overflow-hidden border border-[#e8eaf0] shadow-sm bg-white ${className}`}
+            className={`rounded-2xl border border-[#e8eaf0] shadow-sm bg-white ${className}`}
         >
             {children}
         </div>
@@ -80,13 +80,13 @@ const DataPanelRoot = ({ children, size = "md", className = "" }: DataPanelRootP
 
 export interface DataPanelControlProps extends React.FormHTMLAttributes<HTMLFormElement> {
     children: ReactNode;
-};
+}
 
 const DataPanelControl = ({ children, className = "", ...props }: DataPanelControlProps) => (
     <form
         data-slot="data-panel-control"
         noValidate
-        className={`flex flex-col gap-3 px-4 py-4 border-b border-[#e8eaf0] bg-[#f8f9fc] ${className}`}
+        className={`flex flex-col gap-3 px-4 py-4 border-b border-[#e8eaf0] bg-[#f8f9fc] rounded-t-2xl ${className}`}
         {...props}
     >
         {children}
@@ -106,7 +106,7 @@ const DataPanelControlRow = ({ children, className = "" }: DataPanelControlRowPr
 
 export interface DataPanelControlFieldsetProps extends React.FieldsetHTMLAttributes<HTMLFieldSetElement> {
     children: ReactNode;
-};
+}
 
 const DataPanelControlFieldset = ({ children, className = "", ...props }: DataPanelControlFieldsetProps) => (
     <fieldset
@@ -123,7 +123,7 @@ export interface DataPanelControlTextFieldProps extends React.InputHTMLAttribute
     description?: string;
     inputClassName?: string;
     error?: string;
-};
+}
 
 const DataPanelControlTextField = ({
     label,
@@ -160,7 +160,7 @@ export interface DataPanelControlTextAreaProps extends React.TextareaHTMLAttribu
     description?: string;
     textareaClassName?: string;
     error?: string;
-};
+}
 
 const DataPanelControlTextArea = ({
     label,
@@ -205,7 +205,7 @@ export interface DataPanelControlSelectProps {
     onSelectionChange?: (key: string) => void;
     className?: string;
     disabled?: boolean;
-};
+}
 
 const DataPanelControlSelect = ({
     label,
@@ -283,7 +283,7 @@ export interface DataPanelControlAutocompleteProps {
     onSelectionChange?: (key: string) => void;
     renderOption?: (opt: SelectOption) => ReactNode;
     className?: string;
-};
+}
 
 const DataPanelControlAutocomplete = ({
     label,
@@ -362,7 +362,7 @@ const DataPanelControlAutocomplete = ({
 
 export interface DataPanelControlCheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string;
-};
+}
 
 const DataPanelControlCheckbox = ({ label, className = "", id, ...props }: DataPanelControlCheckboxProps) => {
     const fieldId = id ?? label?.toLowerCase().replace(/\s+/g, "-");
@@ -382,7 +382,7 @@ export interface DataPanelControlCheckboxGroupProps {
     onChange?: (value: string[]) => void;
     orientation?: "horizontal" | "vertical";
     className?: string;
-};
+}
 
 const DataPanelControlCheckboxGroup = ({
     label,
@@ -426,7 +426,7 @@ export interface DataPanelControlRadioGroupProps {
     orientation?: "horizontal" | "vertical";
     className?: string;
     name?: string;
-};
+}
 
 const DataPanelControlRadioGroup = ({
     label,
@@ -461,7 +461,7 @@ const DataPanelControlRadioGroup = ({
 export interface DataPanelControlDateRangeProps extends ComponentPropsWithRef<typeof DateRangePicker> {
     label?: string;
     description?: string;
-};
+}
 
 const DataPanelControlDateRange = ({ label, description, className = "", ...props }: DataPanelControlDateRangeProps) => (
     <div className={`flex flex-col gap-1 ${className}`}>
@@ -474,7 +474,7 @@ const DataPanelControlDateRange = ({ label, description, className = "", ...prop
 export interface DataPanelControlActionsProps {
     children: ReactNode;
     className?: string;
-};
+}
 
 const DataPanelControlActions = ({ children, className = "" }: DataPanelControlActionsProps) => (
     <div
@@ -492,7 +492,7 @@ export interface DataPanelControlButtonProps extends React.ButtonHTMLAttributes<
     variant?: "primary" | "secondary" | "ghost" | "danger";
     size?: "sm" | "md" | "lg";
     onPress?: () => void;
-};
+}
 
 const DataPanelControlButton = ({
     loading = false,
@@ -524,8 +524,6 @@ const DataPanelControlButton = ({
         {children as ReactNode}
     </button>
 );
-
-// ─── Table types ────────────────────────────────────────────────────────────
 
 export interface DataPanelTableColumnDef {
     key: string;
@@ -581,26 +579,28 @@ const DataPanelTable = ({
 
     return (
         <TableSlotContext value={{ setEmptySlot, setFooterSlot }}>
-            <div data-slot="data-panel-table-wrapper" className={`p-3 ${className}`}>
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            {columns.map((col) => (
-                                <TableHead
-                                    key={col.key}
-                                    className={`text-xs font-semibold text-[#6e80a8] uppercase tracking-wide ${col.headerClassName ?? ""}`}
-                                >
-                                    {col.label}
-                                </TableHead>
-                            ))}
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {bodyChildren}
-                    </TableBody>
-                </Table>
-                {footerChildren}
+            <div data-slot="data-panel-table-wrapper" className={className}>
+                <div className="overflow-x-auto">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                {columns.map((col) => (
+                                    <TableHead
+                                        key={col.key}
+                                        className={`text-xs font-semibold text-[#6e80a8] uppercase tracking-wide whitespace-nowrap ${col.headerClassName ?? ""}`}
+                                    >
+                                        {col.label}
+                                    </TableHead>
+                                ))}
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {bodyChildren}
+                        </TableBody>
+                    </Table>
+                </div>
                 {emptySlot}
+                {footerChildren}
                 {footerSlot}
             </div>
         </TableSlotContext>
@@ -612,7 +612,7 @@ export interface DataPanelTableBodyProps {
     rowCount?: number;
     emptyText?: string;
     emptyIcon?: ReactNode;
-};
+}
 
 const DataPanelTableBody = ({ children, rowCount, emptyText = "Không có dữ liệu", emptyIcon }: DataPanelTableBodyProps) => {
     const { setEmptySlot } = useContext(TableSlotContext);
@@ -630,7 +630,7 @@ const DataPanelTableBody = ({ children, rowCount, emptyText = "Không có dữ l
                 </div>
             ) : null,
         );
-    }, [isEmpty, emptyText, setEmptySlot]);
+    }, [isEmpty, emptyText, emptyIcon, setEmptySlot]);
 
     return <>{isEmpty ? null : children}</>;
 };
@@ -657,47 +657,260 @@ const DataPanelTableCell = ({ children, className = "" }: DataPanelTableCellProp
     </TableCell>
 );
 
+function buildPageRangeMobile(current: number, total: number): (number | "…")[] {
+    if (total <= 5) return Array.from({ length: total }, (_, i) => i + 1);
+    if (current <= 2) return [1, 2, "…", total];
+    if (current >= total - 1) return [1, "…", total - 1, total];
+    return [1, "…", current, "…", total];
+}
+
+function buildPageRangeDesktop(current: number, total: number): (number | "…")[] {
+    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+    if (current <= 3) return [1, 2, 3, "…", total];
+    if (current >= total - 2) return [1, "…", total - 2, total - 1, total];
+    return [1, "…", current - 1, current, current + 1, "…", total];
+}
+
+const PAGE_SIZE_OPTIONS_DEFAULT = [10, 20, 50, 100];
+
+const NAV_BTN =
+    "w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg border border-[#e8eaf0] text-[#6e80a8] text-xs sm:text-sm hover:bg-[#f4f6fb] disabled:opacity-40 disabled:cursor-not-allowed transition select-none";
+
 export interface DataPanelTableFooterProps {
     children?: ReactNode;
     totalPages?: number;
     currentPage?: number;
     onPageChange?: (page: number) => void;
+    totalCount?: number;
+    pageSize?: number;
+    onPageSizeChange?: (size: number) => void;
+    pageSizeOptions?: number[];
     className?: string;
 }
 
-const DataPanelTableFooter = ({ children, totalPages, currentPage = 1, onPageChange, className = "" }: DataPanelTableFooterProps) => {
+const DataPanelTableFooter = ({
+    children,
+    totalPages,
+    currentPage = 1,
+    onPageChange,
+    totalCount,
+    pageSize,
+    onPageSizeChange,
+    pageSizeOptions = PAGE_SIZE_OPTIONS_DEFAULT,
+    className = "",
+}: DataPanelTableFooterProps) => {
     const { setFooterSlot } = useContext(TableSlotContext);
 
+    const [jumpValue, setJumpValue] = useState(String(currentPage));
     useEffect(() => {
-        const pages = totalPages ? Array.from({ length: totalPages }, (_, i) => i + 1) : [];
+        setJumpValue(String(currentPage));
+    }, [currentPage]);
+
+    useEffect(() => {
+        const mobilePages = totalPages ? buildPageRangeMobile(currentPage, totalPages) : [];
+        const desktopPages = totalPages ? buildPageRangeDesktop(currentPage, totalPages) : [];
+
+        const handleJumpKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+            if (e.key !== "Enter") return;
+            const p = Math.min(totalPages ?? 1, Math.max(1, Number(jumpValue)));
+            if (!isNaN(p)) onPageChange?.(p);
+        };
+
+        const handleJumpBlur = () => {
+            setJumpValue(String(currentPage));
+        };
+
+        const renderPageButton = (p: number | "…", i: number, isCurrent: boolean) =>
+            p === "…" ? (
+                <span
+                    key={`ellipsis-${i}`}
+                    aria-hidden="true"
+                    className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-[#c0c7d8] text-xs select-none"
+                >
+                    ···
+                </span>
+            ) : (
+                <button
+                    key={p}
+                    type="button"
+                    onClick={() => onPageChange?.(p as number)}
+                    aria-label={`Trang ${p}`}
+                    aria-current={isCurrent ? "page" : undefined}
+                    className={`
+                        w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center rounded-lg
+                        text-xs font-medium transition select-none
+                        ${isCurrent
+                            ? "border border-[#1a2445]/25 bg-[#f0f2f9] text-[#1a2445]"
+                            : "border border-[#e8eaf0] text-[#6e80a8] hover:bg-[#f4f6fb]"
+                        }
+                    `}
+                >
+                    {p}
+                </button>
+            );
+
         setFooterSlot(
-            <div className={`flex items-center justify-between px-4 py-3 border-t border-[#e8eaf0] text-xs text-[#9aa3b8] ${className}`}>
-                <div>{children}</div>
+            <div
+                className={`
+                    flex flex-col gap-2
+                    px-3 sm:px-4 py-3
+                    border-t border-[#e8eaf0]
+                    text-xs text-[#9aa3b8]
+                    ${className}
+                `}
+            >
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                    <div className="flex items-center gap-2 flex-wrap min-w-0">
+                        {children && <span className="shrink-0">{children}</span>}
+
+                        {pageSize !== undefined && (
+                            <div className="flex items-center gap-1">
+                                <select
+                                    value={pageSize}
+                                    onChange={(e) => onPageSizeChange?.(Number(e.target.value))}
+                                    className="
+                                        h-7 pl-2 pr-5 text-xs rounded-lg
+                                        border border-[#e8eaf0] bg-white text-[#1a2445]
+                                        appearance-none cursor-pointer
+                                        focus:outline-none focus:ring-2 focus:ring-[#1a2445]/20 focus:border-[#1a2445]
+                                    "
+                                    style={{
+                                        backgroundImage: CHEVRON_SVG,
+                                        backgroundRepeat: "no-repeat",
+                                        backgroundPosition: "right 6px center",
+                                    }}
+                                >
+                                    {pageSizeOptions.map((s) => (
+                                        <option key={s} value={s}>{s}</option>
+                                    ))}
+                                </select>
+                                <span className="whitespace-nowrap">/ trang</span>
+                                {totalCount !== undefined && (
+                                    <span className="whitespace-nowrap">
+                                        ·{" "}
+                                        <strong className="text-[#1a2445] font-medium">
+                                            {totalCount.toLocaleString("vi-VN")}
+                                        </strong>{" "}
+                                        bản ghi
+                                    </span>
+                                )}
+                            </div>
+                        )}
+
+                        {pageSize === undefined && totalCount !== undefined && (
+                            <span className="whitespace-nowrap">
+                                <strong className="text-[#1a2445] font-medium">
+                                    {totalCount.toLocaleString("vi-VN")}
+                                </strong>{" "}
+                                bản ghi
+                            </span>
+                        )}
+                    </div>
+
+                    {totalPages !== undefined && (
+                        <div className="flex items-center gap-1.5">
+                            <span className="whitespace-nowrap">
+                                Trang{" "}
+                                <strong className="text-[#1a2445] font-medium">{currentPage}</strong>
+                                {" / "}
+                                <strong className="text-[#1a2445] font-medium">{totalPages}</strong>
+                            </span>
+
+                            <div className="hidden sm:flex items-center gap-1.5 ml-2">
+                                <span className="whitespace-nowrap">· Đến trang</span>
+                                <input
+                                    type="number"
+                                    min={1}
+                                    max={totalPages}
+                                    value={jumpValue}
+                                    onChange={(e) => setJumpValue(e.target.value)}
+                                    onKeyDown={handleJumpKeyDown}
+                                    onBlur={handleJumpBlur}
+                                    aria-label="Nhảy đến trang"
+                                    className="
+                                        w-12 h-7 text-center text-xs text-[#1a2445]
+                                        border border-[#e8eaf0] rounded-lg bg-white
+                                        focus:outline-none focus:ring-2 focus:ring-[#1a2445]/20 focus:border-[#1a2445]
+                                        [appearance:textfield]
+                                        [&::-webkit-outer-spin-button]:appearance-none
+                                        [&::-webkit-inner-spin-button]:appearance-none
+                                    "
+                                />
+                            </div>
+                        </div>
+                    )}
+                </div>
+
                 {totalPages !== undefined && (
-                    <div className="flex items-center gap-1">
+                    <div className="flex items-center justify-center gap-1">
                         <button
+                            type="button"
+                            onClick={() => onPageChange?.(1)}
+                            disabled={currentPage <= 1}
+                            title="Trang đầu"
+                            aria-label="Trang đầu"
+                            className={NAV_BTN}
+                        >
+                            «
+                        </button>
+
+                        <button
+                            type="button"
                             onClick={() => onPageChange?.(Math.max(1, currentPage - 1))}
                             disabled={currentPage <= 1}
-                            className="w-7 h-7 flex items-center justify-center rounded-lg border border-[#e8eaf0] text-[#6e80a8] hover:bg-[#f4f6fb] disabled:opacity-40 disabled:cursor-not-allowed transition"
-                        >‹</button>
-                        {pages.map((p) => (
-                            <button
-                                key={p}
-                                onClick={() => onPageChange?.(p)}
-                                className={`w-7 h-7 flex items-center justify-center rounded-lg text-xs font-medium transition ${p === currentPage ? "bg-[#1a2445] text-white border border-[#1a2445]" : "border border-[#e8eaf0] text-[#6e80a8] hover:bg-[#f4f6fb]"}`}
-                                aria-current={p === currentPage ? "page" : undefined}
-                            >{p}</button>
-                        ))}
+                            title="Trang trước"
+                            aria-label="Trang trước"
+                            className={NAV_BTN}
+                        >
+                            ‹
+                        </button>
+
+                        <div className="flex items-center gap-1 sm:hidden">
+                            {mobilePages.map((p, i) => renderPageButton(p, i, p === currentPage))}
+                        </div>
+
+                        <div className="hidden sm:flex items-center gap-1">
+                            {desktopPages.map((p, i) => renderPageButton(p, i, p === currentPage))}
+                        </div>
+
                         <button
+                            type="button"
                             onClick={() => onPageChange?.(Math.min(totalPages, currentPage + 1))}
                             disabled={currentPage >= totalPages}
-                            className="w-7 h-7 flex items-center justify-center rounded-lg border border-[#e8eaf0] text-[#6e80a8] hover:bg-[#f4f6fb] disabled:opacity-40 disabled:cursor-not-allowed transition"
-                        >›</button>
+                            title="Trang sau"
+                            aria-label="Trang sau"
+                            className={NAV_BTN}
+                        >
+                            ›
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={() => onPageChange?.(totalPages)}
+                            disabled={currentPage >= totalPages}
+                            title="Trang cuối"
+                            aria-label="Trang cuối"
+                            className={NAV_BTN}
+                        >
+                            »
+                        </button>
                     </div>
                 )}
             </div>,
         );
-    }, [children, totalPages, currentPage, className, setFooterSlot]);
+    }, [
+        children,
+        totalPages,
+        currentPage,
+        totalCount,
+        pageSize,
+        pageSizeOptions,
+        className,
+        onPageChange,
+        onPageSizeChange,
+        jumpValue,
+        setFooterSlot,
+    ]);
 
     return null;
 };

@@ -39,7 +39,7 @@ export interface MobileDrawerProps {
     isOpen: boolean;
     onClose: () => void;
     menuData: NavMenuData;
-    quickLinks?: MegaMenuPanelQuickLink[];  // fix: was string[]
+    quickLinks?: MegaMenuPanelQuickLink[];
 }
 
 export interface NavbarProps {

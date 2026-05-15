@@ -16,28 +16,28 @@ const NAV_ITEMS = [
   },
   {
     icon: User,
-    label: "Danh mục đơn vị",
-    href: "/dashboard/units",
+    label: "Tiếp nhận",
+    href: "/dashboard/reports",
   },
   {
     icon: User,
-    label: "Danh mục loại khu vực",
+    label: "Danh mục khu vực",
     href: "/dashboard/area-type-ref",
   },
   {
     icon: User,
-    label: "Danh mục loại phản ánh",
-    href: "/dashboard/inquiry-classification",
+    label: "Loại khu vực",
+    href: "/dashboard/units",
   },
   {
     icon: User,
-    label: "Danh mục chủ đề PA",
-    href: "/dashboard/inquiry-topic",
+    label: "Loại phản ánh",
+    href: "/dashboard/report-types",
   },
   {
     icon: User,
-    label: "Công việc thực hiện",
-    href: "/dashboard/todos",
+    label: "Chủ đề phản ánh",
+    href: "/dashboard/report-subjects",
   },
 ];
 
