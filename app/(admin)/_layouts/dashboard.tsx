@@ -12,22 +12,22 @@ const NAV_ITEMS = [
   {
     icon: Home,
     label: "Bảng điều khiển",
-    href: "/dashboard",
+    href: "/admin",
   },
   {
     icon: MapPinned,
     label: "Danh mục khu vực",
-    href: "/dashboard/areas",
+    href: "/admin/areas",
   },
   {
     icon: ClipboardList,
     label: "Loại phản ánh",
-    href: "/dashboard/report-types",
+    href: "/admin/report-types",
   },
   {
     icon: Tags,
     label: "Chủ đề phản ánh",
-    href: "/dashboard/report-subjects",
+    href: "/admin/report-subjects",
   },
 ];
 

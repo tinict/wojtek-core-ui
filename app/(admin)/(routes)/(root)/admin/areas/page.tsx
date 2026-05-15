@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { AreaTypeRefForm, AreaValues } from "../_components/area-type-ref-form";
 import {
     BaseTreeNode,
     TreePageLayout,
 } from "@/app/(admin)/_layouts/tree-layout";
 import { useGetAreas, useCreateArea } from "@/hooks/use-area";
 import { IArea, IAreaTree } from "@/types/models/area.model";
+import { AreaTypeRefForm, AreaValues } from "./_components/area-type-ref-form";
 
 interface AreaNode extends BaseTreeNode {
     areaTypeRcd: string;
