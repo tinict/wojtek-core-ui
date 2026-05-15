@@ -75,7 +75,7 @@ export function useUpdateReportSubject() {
     const { data, status, mutate, mutateAsync } = useMutation({
         mutationKey: ["update-report-subject"],
         mutationFn: (variables: UpdateReportSubjectPayload) =>
-            reportSubjectService.updateReportSubject(variables), // ✅ fix
+            reportSubjectService.updateReportSubject(variables),
         onMutate: async (payload) => {
             await queryClient.cancelQueries({ queryKey: ["report-subjects"] });
 
@@ -121,7 +121,7 @@ export function useDeleteReportSubject(typeId?: string) {
     const { data, status, mutate, mutateAsync } = useMutation({
         mutationKey: ["delete-report-subject"],
         mutationFn: (subjectId: IReportSubject["subjectId"]) =>
-            reportSubjectService.deleteReportSubject(subjectId), // ✅ fix
+            reportSubjectService.deleteReportSubject(subjectId),
         onMutate: async (subjectId) => {
             await queryClient.cancelQueries({ queryKey: ["report-subjects"] });
 

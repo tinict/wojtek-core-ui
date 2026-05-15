@@ -5,14 +5,18 @@ import {
     BaseTreeNode,
     TreePageLayout,
 } from "@/app/(admin)/_layouts/tree-layout";
-import { useGetAreas, useCreateArea } from "@/hooks/use-area";
+import { 
+    useGetAreas, 
+    useCreateArea, 
+    useUpdateArea 
+} from "@/hooks/use-area";
 import { IArea, IAreaTree } from "@/types/models/area.model";
-import { AreaTypeRefForm, AreaValues } from "./_components/area-type-ref-form";
+import { AreaForm, AreaValues } from "./_components/area-form";
 
 interface AreaNode extends BaseTreeNode {
     areaTypeRcd: string;
     children?: AreaNode[];
-}
+};
 
 type SlideMode = "add" | "add-child" | "edit";
 
@@ -32,6 +36,7 @@ export default function AreaPage() {
 
     const { data: areaData } = useGetAreas();
     const { mutateAsync: createArea } = useCreateArea();
+    const { mutateAsync: updateArea } = useUpdateArea();
 
     const areas: IAreaTree[] = Array.isArray(areaData?.data) ? areaData.data : [];
     const treeNodeData = buildTreeNodes(areas);
@@ -60,7 +65,14 @@ export default function AreaPage() {
         };
 
         try {
-            await createArea(payload);
+            if (slideMode === "edit") {
+                await updateArea({ 
+                    areaId: selectedNode!.id, 
+                    ...payload 
+                });
+            } else {
+                await createArea(payload);
+            }
             setShowSlide(false);
         } catch (err) {
             console.error("Lỗi khi lưu khu vực:", err);
@@ -102,7 +114,7 @@ export default function AreaPage() {
             showSlide={showSlide}
             onCloseSlide={() => setShowSlide(false)}
             slideContent={
-                <AreaTypeRefForm
+                <AreaForm
                     key={`${slideMode}-${selectedNode?.id ?? "new"}`}
                     parentAreaId={slideMode === "add-child" ? selectedNode?.id : null}
                     parentAreaName={slideMode === "add-child" ? selectedNode?.label : null}

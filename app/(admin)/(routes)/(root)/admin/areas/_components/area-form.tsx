@@ -76,11 +76,11 @@ const areaFields: FieldConfig<AreaValues>[] = [
     {
         name: "availableFlag",
         type: "select",
-        label: "Khả dụng",
-        placeholder: "Chọn trạng thái khả dụng",
+        label: "Hiển thị",
+        placeholder: "Chọn trạng thái hiển thị",
         options: [
-            { value: "true", label: "Khả dụng" },
-            { value: "false", label: "Không khả dụng" },
+            { value: "true", label: "Hiển thị" },
+            { value: "false", label: "Không hiển thị" },
         ],
     },
 ];
@@ -97,7 +97,7 @@ const AREA_EMPTY: AreaValues = {
     availableFlag: true,
 };
 
-export function AreaTypeRefForm({
+export function AreaForm({
     initialData,
     onSubmit,
     parentAreaId,

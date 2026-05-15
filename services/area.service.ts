@@ -54,6 +54,27 @@ class AreaService {
             }
         }
     }
+
+    async updateArea({
+        areaId,
+        ...fields
+    }: UpdateAreaPayload): Promise<Response<IArea>> {
+        try {
+            const res = await apiTest.post(`/api/areas/${areaId}`, fields);
+
+            return {
+                message: "Success",
+                statusCode: 200,
+                data: res.data,
+            }
+        } catch (error: any) {
+            return {
+                success: false,
+                data: error.message,
+            }
+        }
+    }
+
 }
 
 export default new AreaService();

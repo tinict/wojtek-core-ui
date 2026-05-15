@@ -74,3 +74,61 @@ export function useCreateArea() {
         status,
     }
 };
+
+export function useUpdateArea() {
+    const queryClient = useQueryClient();
+
+    const { data, status, mutate, mutateAsync } = useMutation({
+        mutationKey: ["update-area"],
+        mutationFn: (variables: UpdateAreaPayload) =>
+            areaService.updateArea(variables),
+        onMutate: async (payload) => {
+            await queryClient.cancelQueries({ queryKey: ["update-area"] });
+
+            const scopedKey = ["areas", String(payload.areaId)];
+            const globalKey = ["areas"];
+
+            const previousScoped = queryClient.getQueryData<{ data: IArea[] }>(scopedKey);
+            const previousGlobal = queryClient.getQueryData<{ data: IArea[] }>(globalKey);
+
+            const updater = (old: { data: IArea[] } | undefined) => ({
+                data: (old?.data ?? []).map((item) =>
+                    item.areaId === payload.areaId ? {
+                        ...item,
+                        ...payload
+                    } : item
+                ),
+            });
+
+            queryClient.setQueryData(scopedKey, updater);
+            queryClient.setQueryData(globalKey, updater);
+
+            return {
+                previousScoped,
+                previousGlobal,
+                areadId: payload.areaId
+            };
+        },
+        onError: (_err, payload, context) => {
+            if (context?.previousScoped !== undefined) {
+                queryClient.setQueryData(
+                    ["areas", String(payload.areaId)],
+                    context.previousScoped
+                );
+            }
+            if (context?.previousGlobal !== undefined) {
+                queryClient.setQueryData(["areas"], context.previousGlobal);
+            }
+        },
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ["areas"] });
+        },
+    });
+
+    return {
+        data,
+        mutate,
+        mutateAsync,
+        status
+    };
+}
