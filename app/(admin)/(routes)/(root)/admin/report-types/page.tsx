@@ -5,19 +5,22 @@ import { useState } from "react";
 import SlideOverLayout from "@/app/(admin)/_layouts/slide-over-layout";
 import ReportTypeTableClient from "./_component/report-type-table-client";
 import { IReportType } from "@/types/models/report-type.model";
-import { ReportTypeForm, ReportTypeValues } from "./_component/report-type-form";
 import { 
-    useCreateReportTypes, 
-    useDeleteReportType, 
-    useUpdateReportTypes 
+    ReportTypeForm, 
+    ReportTypeValues 
+} from "./_component/report-type-form";
+import {
+    useCreateReportType,
+    useDeleteReportType,
+    useUpdateReportType,
 } from "@/hooks/use-report-type";
 
 export default function ReportTypePage() {
     const [showSlide, setShowSlide] = useState(false);
     const [editTarget, setEditTarget] = useState<IReportType | null>(null);
 
-    const { mutateAsync: createReportTypes } = useCreateReportTypes();
-    const { mutateAsync: updateReportTypes } = useUpdateReportTypes();
+    const { mutateAsync: createReportType } = useCreateReportType();
+    const { mutateAsync: updateReportType } = useUpdateReportType();
     const { mutateAsync: deleteReportType } = useDeleteReportType();
 
     const openCreate = () => {
@@ -35,26 +38,25 @@ export default function ReportTypePage() {
         setEditTarget(null);
     };
 
-    const handleSubmit = (values: ReportTypeValues) => {
-        if (editTarget) {
-            updateReportTypes({
-                typeId: editTarget.typeId,
-                ...values,
-            }).then(closeSlide);
-        } else {
-            createReportTypes(values).then(closeSlide);
+    const handleSubmit = async (values: ReportTypeValues) => {
+        const res = editTarget
+            ? await updateReportType({ typeId: editTarget.typeId, ...values })
+            : await createReportType(values);
+
+        if (!res.isError) {
+            closeSlide();
         }
     };
 
-    const handleDelete = (row: IReportType) => {
-        deleteReportType(row.typeId);
+    const handleDelete = async (row: IReportType) => {
+        await deleteReportType(row.typeId);
     };
 
     const formInitialData: ReportTypeValues | null = editTarget
         ? {
-            description: editTarget.description,
-            typeName: editTarget.typeName,
-            active: editTarget.active,
+              typeName: editTarget.typeName,
+              description: editTarget.description,
+              active: editTarget.active,
           }
         : null;
 

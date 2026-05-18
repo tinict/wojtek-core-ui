@@ -1,7 +1,7 @@
 "use client";
 
 import * as z from "zod";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import {
   useForm,
   Path,
@@ -119,9 +119,14 @@ export function DynamicForm<T extends FieldValues>({
     defaultValues: (initialData ?? emptyValues) as DefaultValues<T>,
   });
 
+  const prevKeyRef = useRef<string>("");
+
   useEffect(() => {
+    const key = JSON.stringify(initialData ?? null);
+    if (key === prevKeyRef.current) return;
+    prevKeyRef.current = key;
     form.reset((initialData ?? emptyValues) as DefaultValues<T>);
-  }, [initialData]);
+  });
 
   const { isSubmitting, isValid } = form.formState;
 

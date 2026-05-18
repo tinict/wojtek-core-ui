@@ -1,87 +1,42 @@
 import { api } from "@/lib/axios";
-import { Response } from "@/types/api/axios.types"
+import { ApiResponse, PageApiResponse } from "@/types/api/axios.types";
 import { IReportType } from "@/types/models/report-type.model";
+import { execute } from "@/lib/api-helper";
 
-type UpdateReportTypePayload = Pick<IReportType, "typeId"> & Partial<Omit<IReportType, "typeId">>
+type UpdateReportTypePayload = Pick<IReportType, "typeId"> & Partial<Omit<IReportType, "typeId">>;
+
+export interface GetReportTypesParams {
+    typeName?: string;
+    active?: boolean;
+    page?: number;
+    size?: number;
+    sortBy?: string;
+    sortDir?: "asc" | "desc";
+};
 
 class ReportTypeService {
-    async getReportTypes(): Promise<Response<IReportType[]>> {
-        try {
-            const res = await api.get("/api/v1/report-types");
-
-            return {
-                message: "Success",
-                statusCode: 200,
-                data: res.data.data,
-            }
-        } catch (error: any) {
-            return {
-                success: false,
-                data: error.message,
-            }
-        }
+    getReportTypes(params?: GetReportTypesParams): Promise<PageApiResponse<IReportType>> {
+        return execute(() => api.get("/api/v1/report-types", { params }));
     }
 
-    async createReportType({
-        typeName,
-        description,
-        active,
-    }: Omit<IReportType, "typeId">): Promise<Response<IReportType>> {
-        try {
-            const res = await api.post(`/api/v1/report-types`, {
-                typeName,
-                description,
-                active
-            })
-
-            return {
-                message: "Success",
-                statusCode: 200,
-                data: res.data,
-            }
-        } catch (error: any) {
-            return {
-                success: false,
-                data: error.message,
-            }
-        }
+    getReportTypeById(typeId: IReportType["typeId"]): Promise<ApiResponse<IReportType>> {
+        return execute(() => api.get(`/api/v1/report-types/${typeId}`));
     }
 
-    async updateReportType({
-        typeId,
-        ...fields
-    }: UpdateReportTypePayload): Promise<Response<IReportType>> {
-        try {
-            const res = await api.put(`/api/v1/report-types/${typeId}`, fields)
-
-            return {
-                message: "Success",
-                statusCode: 200,
-                data: res.data,
-            }
-        } catch (error: any) {
-            return {
-                success: false,
-                data: error.message,
-            }
-        }
+    createReportType(payload: Omit<IReportType, "typeId">): Promise<ApiResponse<IReportType>> {
+        return execute(() => api.post("/api/v1/report-types", payload));
     }
 
-    async deleteReportType(typeId: IReportType["typeId"]): Promise<Response<null>> {
-        try {
-            await api.delete(`/api/v1/report-types/${typeId}`)
+    updateReportType({ typeId, ...fields }: UpdateReportTypePayload): Promise<ApiResponse<IReportType>> {
+        return execute(() => api.put(`/api/v1/report-types/${typeId}`, fields));
+    }
 
-            return {
-                message: "Success",
-                statusCode: 200,
-                data: null,
-            }
-        } catch (error: any) {
-            return {
-                success: false,
-                data: error.message,
-            }
-        }
+    toggleReportType(typeId: IReportType["typeId"]): Promise<ApiResponse<IReportType>> {
+        return execute(() => api.patch(`/api/v1/report-types/${typeId}/toggle`));
+    }
+
+    deleteReportType(typeId: IReportType["typeId"]): Promise<ApiResponse<null>> {
+        return execute(() => api.delete(`/api/v1/report-types/${typeId}`));
     }
 }
 

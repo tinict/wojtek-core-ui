@@ -3,25 +3,25 @@
 import { useState } from "react";
 
 import SlideOverLayout from "@/app/(admin)/_layouts/slide-over-layout";
-import ReportTypeTableClient from "./_component/report-type-table-client";
-import { 
-    useCreateReportTypes, 
-    useDeleteReportType, 
-    useUpdateReportTypes 
-} from "@/hooks/use-report-type";
+import {
+    useCreateReportSubject,
+    useUpdateReportSubject,
+    useDeleteReportSubject,
+} from "@/hooks/use-report-subject";
 import { IReportSubject } from "@/types/models/report-subject.model";
-import { 
-    ReportSubjectForm, 
-    ReportSubjectValues 
+import {
+    ReportSubjectForm,
+    ReportSubjectValues,
 } from "./_component/report-type-form";
+import ReportSubjectTableClient from "./_component/report-type-table-client";
 
 export default function ReportSubjectPage() {
     const [showSlide, setShowSlide] = useState(false);
     const [editTarget, setEditTarget] = useState<IReportSubject | null>(null);
 
-    const { mutateAsync: createReportTypes } = useCreateReportTypes();
-    const { mutateAsync: updateReportTypes } = useUpdateReportTypes();
-    const { mutateAsync: deleteReportType } = useDeleteReportType();
+    const { mutateAsync: createReportSubject } = useCreateReportSubject();
+    const { mutateAsync: updateReportSubject } = useUpdateReportSubject();
+    const { mutateAsync: deleteReportSubject } = useDeleteReportSubject();
 
     const openCreate = () => {
         setEditTarget(null);
@@ -38,34 +38,39 @@ export default function ReportSubjectPage() {
         setEditTarget(null);
     };
 
-    const handleSubmit = (values: ReportSubjectValues) => {
+    const handleSubmit = async (values: ReportSubjectValues) => {
+        const payload = {
+            ...values,
+            active: values.active === "true",
+        };
+
         if (editTarget) {
-            // updateReportTypes({
-            //     typeId: editTarget.,
-            //     ...values,
-            // }).then(closeSlide);
+            await updateReportSubject({
+                subjectId: editTarget.subjectId,
+                ...payload,
+            });
         } else {
-            // createReportTypes(values).then(closeSlide);
+            await createReportSubject(payload);
         }
+        closeSlide();
     };
 
-    const handleDelete = (row: IReportSubject) => {
-        // deleteReportType(row.typeId);
+    const handleDelete = async (row: IReportSubject) => {
+        await deleteReportSubject(row.subjectId);
     };
 
     const formInitialData: ReportSubjectValues | null = editTarget
         ? {
-            description: editTarget.description,
-            subjectName: editTarget.subjectName,
-            typeId: editTarget.typeId,
-            active: editTarget.active
-
+              description: editTarget.description,
+              subjectName: editTarget.subjectName,
+              typeId: String(editTarget.typeId),
+              active: editTarget.active ? "true" : "false",
           }
         : null;
 
     return (
         <div className="min-h-full bg-[#f4f6fb] p-3 sm:p-6">
-            <ReportTypeTableClient
+            <ReportSubjectTableClient
                 openEdit={openEdit}
                 openCreate={openCreate}
                 onDelete={handleDelete}
@@ -73,7 +78,11 @@ export default function ReportSubjectPage() {
             <SlideOverLayout
                 showSlide={showSlide}
                 closeSlide={closeSlide}
-                title={editTarget ? "Cập nhật loại phản ánh" : "Thêm loại phản ánh"}
+                title={
+                    editTarget
+                        ? "Cập nhật chủ đề phản ánh"
+                        : "Thêm chủ đề phản ánh"
+                }
             >
                 <ReportSubjectForm
                     initialData={formInitialData}

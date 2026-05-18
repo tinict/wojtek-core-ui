@@ -1,0 +1,21 @@
+export interface IDevice {
+    deviceId: string;
+    deviceCode: string;
+    deviceName: string;
+    categoryId?: string;
+    categoryName?: string;
+    supplierId?: string;
+    supplierName?: string;
+    manufacturerId?: string;
+    manufacturerName?: string;
+    assetSourceId?: string;
+    assetSourceName?: string;
+    riskLevelId?: string;
+    riskLevelName?: string;
+    model?: string;
+    serialNumber?: string;
+    purchaseDate?: string;
+    status?: string;
+    description?: string;
+    activeFlag: number;
+};

@@ -6,13 +6,31 @@ import Navbar from "../_components/navbar";
 import SubNavbar from "../_components/sub-navbar";
 import Sidebar from "../_components/sidebar";
 import MobileSlidebar from "../_components/mobile-slidebar";
-import { ClipboardList, Home, MapPinned, Tags } from "lucide-react";
+import { 
+  Building2, 
+  ClipboardList, 
+  Hospital, 
+  LayoutDashboard, 
+  MapPinned, 
+  MessageSquareWarning, 
+  MonitorSmartphone, 
+  PackageSearch, 
+  QrCode, 
+  Shapes, 
+  ShieldAlert, 
+  Truck 
+} from "lucide-react";
 
 const NAV_ITEMS = [
   {
-    icon: Home,
+    icon: LayoutDashboard,
     label: "Bảng điều khiển",
     href: "/admin",
+  },
+  {
+    icon: Hospital,
+    label: "Thiết bị khoa phòng",
+    href: "/admin/device-handovers",
   },
   {
     icon: MapPinned,
@@ -20,14 +38,54 @@ const NAV_ITEMS = [
     href: "/admin/areas",
   },
   {
+    icon: Building2,
+    label: "Danh mục đơn vị",
+    href: "/admin/units",
+  },
+  {
+    icon: Shapes,
+    label: "Phân loại thiết bị",
+    href: "/admin/device-categories",
+  },
+  {
+    icon: Shapes,
+    label: "Nhà sản xuất",
+    href: "/admin/manufacturers",
+  },
+  {
+    icon: Truck,
+    label: "Nhà cung cấp",
+    href: "/admin/suppliers",
+  },
+  {
+    icon: MonitorSmartphone,
+    label: "Thiết bị",
+    href: "/admin/devices",
+  },
+  {
     icon: ClipboardList,
-    label: "Loại phản ánh",
+    label: "Phân loại yêu cầu",
     href: "/admin/report-types",
   },
   {
-    icon: Tags,
-    label: "Chủ đề phản ánh",
+    icon: MessageSquareWarning,
+    label: "Chủ đề yêu cầu",
     href: "/admin/report-subjects",
+  },
+  {
+    icon: PackageSearch,
+    label: "Nguồn tài sản",
+    href: "/admin/asset-sources",
+  },
+  {
+    icon: ShieldAlert,
+    label: "Phân loại rủi ro",
+    href: "/admin/risk-levels",
+  },
+  {
+    icon: QrCode,
+    label: "Phân loại QR code",
+    href: "/admin/barcode-formats",
   },
 ];
 

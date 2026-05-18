@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { Edit2, Plus, Trash2 } from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
+import { Edit2, Trash2 } from "lucide-react";
 
 import { useGetReportSubjects } from "@/hooks/use-report-subject";
 import { useGetReportTypes } from "@/hooks/use-report-type";
+import { GetReportSubjectsParams } from "@/services/report-subject.service";
 
 import {
     AlertDialog,
@@ -18,7 +19,32 @@ import {
 } from "@/components/ui/alert-dialog";
 
 import { IReportSubject } from "@/types/models/report-subject.model";
-import { DataTable } from "../../_components/data-table";
+import { ColumnDef, DataTable, RowAction } from "../../_components/data-table";
+
+const columns: ColumnDef<IReportSubject>[] = [
+    { key: "subjectId", header: "Mã chủ đề" },
+    { key: "subjectName", header: "Tên chủ đề" },
+    { key: "typeName", header: "Loại phản ánh" },
+    { key: "description", header: "Mô tả" },
+    {
+        key: "active",
+        header: "Trạng thái",
+        render: (row) => (
+            <span
+                className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                    row.active
+                        ? "bg-green-100 text-green-700"
+                        : "bg-red-100 text-red-600"
+                }`}
+            >
+                {row.active ? "Hoạt động" : "Ngừng hoạt động"}
+            </span>
+        ),
+    },
+];
+
+const ACTIVE_FILTER_KEY = "active";
+const TYPE_FILTER_KEY = "typeId";
 
 export default function ReportSubjectTableClient({
     openEdit,
@@ -29,49 +55,98 @@ export default function ReportSubjectTableClient({
     openCreate: () => void;
     onDelete: (row: IReportSubject) => void;
 }) {
+    const [params, setParams] = useState<GetReportSubjectsParams>({
+        page: 0,
+        size: 10,
+        active: true,
+    });
+
     const [deleteTarget, setDeleteTarget] = useState<IReportSubject | null>(
         null,
     );
-    const [typeId, setTypeId] = useState("");
-    const { data: subjectData, status } = useGetReportSubjects(typeId);
-    const { data: typeData } = useGetReportTypes();
 
-    const rows: IReportSubject[] = Array.isArray(subjectData?.data)
-        ? subjectData.data
-        : [];
+    const { data: subjectData, status } = useGetReportSubjects(params);
+    const { data: typeData } = useGetReportTypes({ size: 999 });
+
+    const rows = subjectData?.isError === false ? subjectData.data.content : [];
+    const totalElements =
+        subjectData?.isError === false ? subjectData.data.totalElements : 0;
+    const totalPages =
+        subjectData?.isError === false ? subjectData.data.totalPages : 1;
 
     const typeOptions = useMemo(
         () => [
-            {
-                value: "",
-                label: "Tất cả",
-            },
-
-            ...(Array.isArray(typeData?.data)
-                ? typeData.data.map((type) => ({
-                      value: String(type.typeId),
-
-                      label: type.typeName ?? String(type.typeId),
+            ...(typeData?.isError === false
+                ? typeData.data.content.map((t) => ({
+                      value: String(t.typeId),
+                      label: t.typeName ?? String(t.typeId),
                   }))
                 : []),
         ],
         [typeData],
     );
 
-    const activeOptions = [
-        {
-            value: "",
-            label: "Tất cả",
+    const actions = useCallback(
+        (row: IReportSubject): RowAction<IReportSubject>[] => [
+            {
+                icon: <Edit2 size={14} />,
+                label: "Sửa",
+                onClick: openEdit,
+            },
+            {
+                icon: <Trash2 size={14} />,
+                label: "Xóa",
+                danger: true,
+                onClick: (r) => setDeleteTarget(r),
+            },
+        ],
+        [openEdit],
+    );
+
+    const handleSearchChange = useCallback(
+        (value: string) =>
+            setParams((prev) => ({
+                ...prev,
+                subjectName: value || undefined,
+                page: 0,
+            })),
+        [],
+    );
+
+    const handleFilterChange = useCallback(
+        (filters: Record<string, string>) => {
+            const active = filters[ACTIVE_FILTER_KEY];
+            const typeId = filters[TYPE_FILTER_KEY];
+            setParams((prev) => ({
+                ...prev,
+                typeId: typeId || undefined,
+                active: active === "" ? undefined : active === "true",
+                page: 0,
+            }));
         },
-        {
-            value: "true",
-            label: "Hoạt động",
-        },
-        {
-            value: "false",
-            label: "Ngừng hoạt động",
-        },
-    ];
+        [],
+    );
+
+    const handlePageChange = useCallback(
+        (page: number) => setParams((prev) => ({ ...prev, page: page - 1 })),
+        [],
+    );
+
+    const handlePageSizeChange = useCallback(
+        (size: number) => setParams((prev) => ({ ...prev, size, page: 0 })),
+        [],
+    );
+
+    const handleDeleteConfirm = useCallback(() => {
+        if (deleteTarget) {
+            onDelete(deleteTarget);
+            setDeleteTarget(null);
+        }
+    }, [deleteTarget, onDelete]);
+
+    const handleDeleteDialogClose = useCallback((open: boolean) => {
+        if (!open) setDeleteTarget(null);
+    }, []);
 
     return (
         <>
@@ -79,118 +154,69 @@ export default function ReportSubjectTableClient({
                 data={rows}
                 loading={status === "pending"}
                 manualFiltering
+                columns={columns}
                 rowKey={(row) => row.subjectId}
-                emptyText="Không tìm thấy đối tượng phản ánh nào."
-                columns={[
-                    {
-                        key: "subjectId",
-                        header: "Mã chủ đề",
-                    },
-
-                    {
-                        key: "subjectName",
-                        header: "Tên chủ đề",
-                    },
-
-                    {
-                        key: "description",
-                        header: "Mô tả",
-                    },
-
-                    {
-                        key: "typeId",
-                        header: "Loại phản ánh",
-                    },
-
-                    {
-                        key: "active",
-                        header: "Trạng thái",
-
-                        render: (row) => (
-                            <span
-                                className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
-                                    row.active
-                                        ? "bg-green-100 text-green-700"
-                                        : "bg-red-100 text-red-600"
-                                }`}
-                            >
-                                {row.active ? "Hoạt động" : "Ngừng hoạt động"}
-                            </span>
-                        ),
-                    },
-                ]}
-                actions={(row) => [
-                    {
-                        icon: <Edit2 size={14} />,
-                        label: "Sửa",
-                        onClick: () => openEdit(row),
-                    },
-                    {
-                        icon: <Trash2 size={14} />,
-                        label: "Xóa",
-                        variant: "danger",
-                        onClick: () => setDeleteTarget(row),
-                    },
-                ]}
+                actions={actions}
+                emptyText="Không tìm thấy chủ đề phản ánh nào."
+                pagination={{
+                    page: (params.page ?? 0) + 1,
+                    pageSize: params.size ?? 10,
+                    totalPages,
+                    totalCount: totalElements,
+                    onPageChange: handlePageChange,
+                    onPageSizeChange: handlePageSizeChange,
+                }}
+                summary={() => <span>{totalElements} chủ đề</span>}
                 toolbar={{
-                    searchPlaceholder: "Tìm kiếm tên, mô tả...",
-                    searchKeys: ["subjectName"],
+                    searchPlaceholder: "Tìm theo tên chủ đề",
+                    searchKeys: ["subjectName"] as (keyof IReportSubject)[],
+                    onSearchChange: handleSearchChange,
+                    defaultFilterValues: {
+                        [ACTIVE_FILTER_KEY]: "true",
+                    },
                     filters: [
                         {
-                            key: "typeId",
+                            key: TYPE_FILTER_KEY,
                             label: "Loại phản ánh",
                             options: typeOptions,
                             widthCls: "w-52",
                         },
                         {
-                            key: "active",
+                            key: ACTIVE_FILTER_KEY,
                             label: "Trạng thái",
-                            options: activeOptions,
-                            widthCls: "w-44",
+                            options: [
+                                { label: "Tất cả", value: "" },
+                                { label: "Hoạt động", value: "true" },
+                                { label: "Ngừng hoạt động", value: "false" },
+                            ],
                         },
                     ],
+                    onFilterChange: handleFilterChange,
                     onAdd: openCreate,
                     addLabel: "Thêm mới",
-                    extraControls: <Plus size={0} className="hidden" />,
-                    onFilterChange: (filters) => {
-                        setTypeId(filters.typeId ?? "");
-                    },
                 }}
             />
+
             <AlertDialog
                 open={!!deleteTarget}
-                onOpenChange={(open) => {
-                    if (!open) {
-                        setDeleteTarget(null);
-                    }
-                }}
+                onOpenChange={handleDeleteDialogClose}
             >
                 <AlertDialogContent>
                     <AlertDialogHeader>
                         <AlertDialogTitle>Xác nhận xóa</AlertDialogTitle>
-
                         <AlertDialogDescription>
-                            Bạn có chắc chắn muốn xóa đối tượng phản ánh{" "}
+                            Bạn có chắc chắn muốn xóa chủ đề{" "}
                             <span className="font-semibold text-foreground">
                                 {deleteTarget?.subjectName}
                             </span>{" "}
                             không? Hành động này không thể hoàn tác.
                         </AlertDialogDescription>
                     </AlertDialogHeader>
-
                     <AlertDialogFooter>
                         <AlertDialogCancel>Hủy</AlertDialogCancel>
                         <AlertDialogAction
                             className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                            onClick={() => {
-                                if (!deleteTarget) {
-                                    return;
-                                }
-
-                                onDelete(deleteTarget);
-
-                                setDeleteTarget(null);
-                            }}
+                            onClick={handleDeleteConfirm}
                         >
                             Xóa
                         </AlertDialogAction>

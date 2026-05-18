@@ -1,6 +1,13 @@
 "use client";
 
-import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
+import {
+    ReactNode,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+} from "react";
 
 import { Button } from "@/components/ui/button";
 import { DataPanel } from "@/components/wojtek-ui/data-panel";
@@ -39,6 +46,7 @@ export interface ToolbarConfig<TData> {
     searchPlaceholder?: string;
     searchKeys?: (keyof TData)[];
     filters?: FilterDef[];
+    defaultFilterValues?: Record<string, string>;
     customFilter?: (
         row: TData,
         search: string,
@@ -100,24 +108,33 @@ export function DataTable<TData>({
     className,
 }: DataTableProps<TData>) {
     const [search, setSearch] = useState("");
-
     const [filterValues, setFilterValues] = useState<Record<string, string>>(
-        {},
+        toolbar?.defaultFilterValues ?? {},
     );
-
     const [internalPage, setInternalPage] = useState(1);
 
+    const onSearchChangeRef = useRef(toolbar?.onSearchChange);
+    const onFilterChangeRef = useRef(toolbar?.onFilterChange);
+
     useEffect(() => {
-        if (manualFiltering) {
-            toolbar?.onSearchChange?.(search);
-        }
-    }, [search, manualFiltering, toolbar]);
+        onSearchChangeRef.current = toolbar?.onSearchChange;
+    });
+
+    useEffect(() => {
+        onFilterChangeRef.current = toolbar?.onFilterChange;
+    });
 
     useEffect(() => {
         if (manualFiltering) {
-            toolbar?.onFilterChange?.(filterValues);
+            onSearchChangeRef.current?.(search);
         }
-    }, [filterValues, manualFiltering, toolbar]);
+    }, [search, manualFiltering]);
+
+    useEffect(() => {
+        if (manualFiltering) {
+            onFilterChangeRef.current?.(filterValues);
+        }
+    }, [filterValues, manualFiltering]);
 
     const visibleColumns = useMemo(
         () => columns.filter((column) => !column.hidden),
@@ -209,23 +226,24 @@ export function DataTable<TData>({
 
     const handleClear = useCallback(() => {
         setSearch("");
-
-        setFilterValues({});
+        setFilterValues(toolbar?.defaultFilterValues ?? {});
 
         if (!isServerPagination) {
             setInternalPage(1);
         }
-    }, [isServerPagination]);
+    }, [isServerPagination, toolbar?.defaultFilterValues]);
 
+    const defaultFilters = toolbar?.defaultFilterValues ?? {};
     const hasDirtyFilters =
-        search.trim() !== "" || Object.values(filterValues).some(Boolean);
+        search.trim() !== "" ||
+        Object.entries(filterValues).some(
+            ([k, v]) => v !== (defaultFilters[k] ?? ""),
+        );
 
     const panelColumns = [
         ...visibleColumns.map((column) => ({
             key: String(column.key),
-
             label: column.header,
-
             headerClassName: column.headerClassName,
         })),
 
@@ -233,9 +251,7 @@ export function DataTable<TData>({
             ? [
                   {
                       key: "__actions__",
-
                       label: "Thao tác",
-
                       headerClassName: "text-right",
                   },
               ]
@@ -359,7 +375,6 @@ export function DataTable<TData>({
                     ))}
                 </DataPanel.Table.Body>
 
-                {/* FOOTER */}
                 <DataPanel.Table.Footer
                     totalPages={totalPages}
                     currentPage={currentPage}

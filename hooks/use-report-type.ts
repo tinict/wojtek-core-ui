@@ -1,4 +1,4 @@
-import reportTypeService from "@/services/report-types.service";
+import reportTypeService, { GetReportTypesParams } from "@/services/report-types.service";
 import { IReportType } from "@/types/models/report-type.model";
 import {
     useMutation,
@@ -6,143 +6,76 @@ import {
     useQueryClient,
 } from "@tanstack/react-query";
 
-type UpdateReportTypePayload = Pick<IReportType, "typeId"> & Partial<Omit<IReportType, "typeId">>
+type UpdateReportTypePayload = Pick<IReportType, "typeId"> &
+    Partial<Omit<IReportType, "typeId">>;
 
-export function useGetReportTypes() {
+export function useGetReportTypes(params?: GetReportTypesParams) {
     const { data, status, refetch } = useQuery({
-        queryKey: [`report-types`],
-        queryFn: () => reportTypeService.getReportTypes(),
+        queryKey: ["report-types", params],
+        queryFn:  () => reportTypeService.getReportTypes(params),
         staleTime: 5000,
         refetchOnWindowFocus: false,
-    })
+    });
 
-    return {
-        data,
-        status,
-        refetch
-    }
+    return { data, status, refetch };
 }
 
-export function useCreateReportTypes() {
-    const queryClient = useQueryClient()
+export function useCreateReportType() {
+    const queryClient = useQueryClient();
 
     const { data, status, mutate, mutateAsync } = useMutation({
         mutationKey: ["create-report-type"],
-        mutationFn: (variables: Omit<IReportType, "typeId">) =>
+        mutationFn:  (variables: Omit<IReportType, "typeId">) =>
             reportTypeService.createReportType(variables),
-        onMutate: async (payload: Omit<IReportType, "typeId">) => {
-            await queryClient.cancelQueries({
-                queryKey: ["report-types"],
-            })
-
-            const previousData = queryClient.getQueryData<{ data: IReportType[] }>(["report-types"])
-
-            queryClient.setQueryData(
-                ["report-types"],
-                (old: { data: IReportType[] } | undefined) => ({
-                    data: [...(old?.data ?? []), payload],
-                })
-            )
-
-            return { previousData }
-        },
-        onError: (_err, _payload, context) => {
-            queryClient.setQueryData(
-                ["report-types"],
-                context?.previousData
-            )
-        },
         onSettled: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["report-types"],
-            })
+            queryClient.invalidateQueries({ queryKey: ["report-types"] });
         },
-    })
+    });
 
-    return {
-        data,
-        mutate,
-        mutateAsync,
-        status,
-    }
+    return { data, mutate, mutateAsync, status };
 }
 
-export function useUpdateReportTypes() {
-    const queryClient = useQueryClient()
+export function useUpdateReportType() {
+    const queryClient = useQueryClient();
 
     const { data, status, mutate, mutateAsync } = useMutation({
         mutationKey: ["update-report-type"],
-        mutationFn: (variables: UpdateReportTypePayload) =>
+        mutationFn:  (variables: UpdateReportTypePayload) =>
             reportTypeService.updateReportType(variables),
-        onMutate: async (payload: UpdateReportTypePayload) => {
-            await queryClient.cancelQueries({ queryKey: ["report-types"] })
-
-            const previousData = queryClient.getQueryData<{ data: IReportType[] }>(["report-types"])
-
-            queryClient.setQueryData(
-                ["report-types"],
-                (old: { data: IReportType[] } | undefined) => ({
-                    data: (old?.data ?? []).map(item =>
-                        item.typeId === payload.typeId ? { ...item, ...payload } : item
-                    ),
-                })
-            )
-
-            return { previousData }
-        },
-        onError: (_err, _payload, context) => {
-            queryClient.setQueryData(["report-types"], context?.previousData)
-        },
         onSettled: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["report-types"],
-            })
+            queryClient.invalidateQueries({ queryKey: ["report-types"] });
         },
-    })
+    });
 
-    return {
-        data,
-        mutate,
-        mutateAsync,
-        status,
-    }
+    return { data, mutate, mutateAsync, status };
 }
 
 export function useDeleteReportType() {
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
 
     const { data, status, mutate, mutateAsync } = useMutation({
         mutationKey: ["delete-report-type"],
-        mutationFn: (typeId: IReportType["typeId"]) =>
+        mutationFn:  (typeId: IReportType["typeId"]) =>
             reportTypeService.deleteReportType(typeId),
-        onMutate: async (typeId: IReportType["typeId"]) => {
-            await queryClient.cancelQueries({ queryKey: ["report-types"] })
-
-            const previousData = queryClient.getQueryData<{ data: IReportType[] }>(["report-types"])
-
-            queryClient.setQueryData(
-                ["report-types"],
-                (old: { data: IReportType[] } | undefined) => ({
-                    data: (old?.data ?? []).filter(item => item.typeId !== typeId),
-                })
-            )
-
-            return { previousData }
-        },
-        onError: (_err, _payload, context) => {
-            queryClient.setQueryData(["report-types"], context?.previousData)
-        },
         onSettled: () => {
-            queryClient.invalidateQueries({
-                queryKey: ["report-types"],
-            })
+            queryClient.invalidateQueries({ queryKey: ["report-types"] });
         },
-    })
+    });
 
-    return {
-        data,
-        mutate,
-        mutateAsync,
-        status,
-    }
+    return { data, mutate, mutateAsync, status };
+}
+
+export function useToggleReportType() {
+    const queryClient = useQueryClient();
+
+    const { data, status, mutate, mutateAsync } = useMutation({
+        mutationKey: ["toggle-report-type"],
+        mutationFn:  (typeId: IReportType["typeId"]) =>
+            reportTypeService.toggleReportType(typeId),
+        onSettled: () => {
+            queryClient.invalidateQueries({ queryKey: ["report-types"] });
+        },
+    });
+
+    return { data, mutate, mutateAsync, status };
 }

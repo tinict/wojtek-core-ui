@@ -1,80 +1,22 @@
 import { apiTest } from "@/lib/axios";
-import { Response } from "@/types/api/axios.types"
+import { ApiResponse } from "@/types/api/axios.types";
 import { IArea, IAreaTree } from "@/types/models/area.model";
+import { execute } from "@/lib/api-helper";
 
-type UpdateAreaPayload = Pick<IArea, "areaId"> & Partial<Omit<IArea, "areaId">>
+type UpdateAreaPayload = Pick<IArea, "areaId"> & Partial<Omit<IArea, "areaId">>;
 
 class AreaService {
-    async getAreas(): Promise<Response<IAreaTree[]>> {
-        try {
-            const res = await apiTest.get("/api/areas/tree");
-
-            return {
-                message: "Success",
-                statusCode: 200,
-                data: res.data,
-            }
-        } catch (error: any) {
-            return {
-                success: false,
-                data: error.message,
-            }
-        }
+    getAreas(): Promise<ApiResponse<IAreaTree[]>> {
+        return execute(() => apiTest.get("/api/areas/tree"));
     }
 
-    async createArea({
-        areaName,
-        areaNameE,
-        areaNameL,
-        areaTypeRcd,
-        activeFlag,
-        parentAreaId,
-        shortCode
-    }: Omit<IArea, "areaId">): Promise<Response<IArea>> {
-        try {
-            const res = await apiTest.post(`/api/areas`, {
-                areaName,
-                areaNameE,
-                areaNameL,
-                areaTypeRcd,
-                activeFlag,
-                parentAreaId,
-                shortCode
-            });
-
-            return {
-                message: "Success",
-                statusCode: 200,
-                data: res.data,
-            }
-        } catch (error: any) {
-            return {
-                success: false,
-                data: error.message,
-            }
-        }
+    createArea(payload: Omit<IArea, "areaId">): Promise<ApiResponse<IArea>> {
+        return execute(() => apiTest.post("/api/areas", payload));
     }
 
-    async updateArea({
-        areaId,
-        ...fields
-    }: UpdateAreaPayload): Promise<Response<IArea>> {
-        try {
-            const res = await apiTest.post(`/api/areas/${areaId}`, fields);
-
-            return {
-                message: "Success",
-                statusCode: 200,
-                data: res.data,
-            }
-        } catch (error: any) {
-            return {
-                success: false,
-                data: error.message,
-            }
-        }
+    updateArea({ areaId, ...fields }: UpdateAreaPayload): Promise<ApiResponse<IArea>> {
+        return execute(() => apiTest.put(`/api/areas/${areaId}`, fields));
     }
-
 }
 
 export default new AreaService();
