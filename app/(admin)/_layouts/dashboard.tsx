@@ -28,6 +28,16 @@ const NAV_ITEMS = [
     href: "/admin",
   },
   {
+    icon: ClipboardList,
+    label: "Nhiệm vụ cá nhân",
+    href: "/admin/checklists",
+  },
+  {
+    icon: ClipboardList,
+    label: "Yêu cầu",
+    href: "/admin/asset-maintenance",
+  },
+  {
     icon: Hospital,
     label: "Thiết bị khoa phòng",
     href: "/admin/device-handovers",
