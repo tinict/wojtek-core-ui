@@ -1,5 +1,5 @@
-import AuthForm from "@/app/test/email-password/email-password";
 import { createClient } from "@/lib/supabase/server-client";
+import AuthForm from "./_components/auth-form";
 
 export default async function LoginPage() {
     const supabase = await createClient();

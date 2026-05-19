@@ -1,5 +1,5 @@
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 
 function getEnvironmentVariables() {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -7,7 +7,7 @@ function getEnvironmentVariables() {
 
     if (!supabaseUrl || !supabaseAnonKey) {
         throw new Error(
-            "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY"
+            'Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY'
         );
     }
 
@@ -28,10 +28,11 @@ export async function createClient() {
                     cookiesToSet.forEach(({ name, value, options }) =>
                         cookieStore.set(name, value, options)
                     );
-                } catch (error) {
-                    console.log(error)
+                } catch {
+                    // Server Component không thể set cookie — bỏ qua lỗi này
+                    // Cookie sẽ được set bởi middleware
                 }
-            }
-        }
+            },
+        },
     });
 }
